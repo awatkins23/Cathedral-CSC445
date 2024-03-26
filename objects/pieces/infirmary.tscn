@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://0ib72auly8qh"]
+
+[ext_resource type="PackedScene" uid="uid://cruq6akytcpoh" path="res://imports/pieces/Infirmary.glb" id="1_sd37r"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_sgoik"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_c8quo"]
+
+[node name="Infirmary" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_sd37r")]
+script = ExtResource("2_sgoik")
+type = 10
+shape = Array[Vector2]([Vector2(0, 0), Vector2(0, 1), Vector2(1, 0), Vector2(-1, 0), Vector2(0, -1)])
+mesh = NodePath("5Infirmary")
+animator = NodePath("PieceAnimator")
+
+[node name="5Infirmary" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_c8quo")]

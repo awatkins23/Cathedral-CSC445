@@ -1,0 +1,24 @@
+class_name Globals
+
+enum Piece {
+	TAVERN, 
+	STABLE, 
+	INN, 
+	BRIDGE, 
+	SQUARE, 
+	MANOR, 
+	LIGHT_ABBEY,
+	DARK_ABBEY, 
+	LIGHT_ACADEMY,
+	DARK_ACADEMY,
+	INFIRMARY,
+	CASTLE,
+	TOWER,
+	CATHEDRAL
+}
+
+enum Team {
+	DARK,
+	LIGHT,
+	CATHEDRAL
+}

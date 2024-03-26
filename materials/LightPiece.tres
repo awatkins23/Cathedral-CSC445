@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://sqg68hnguct1"]
+
+[ext_resource type="Shader" path="res://shaders/spatial_outline.gdshader" id="1_buxfy"]
+[ext_resource type="Shader" path="res://shaders/thick_outline.gdshader" id="1_yomxb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5gwme"]
+render_priority = 1
+shader = ExtResource("1_yomxb")
+shader_parameter/outline_color = Color(1, 0.796078, 0.521569, 1)
+shader_parameter/outline_width = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g5ta3"]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_5gwme")
+shader = ExtResource("1_buxfy")
+shader_parameter/outline_threshold = 0.2
+shader_parameter/outline_color = Color(1, 0.705882, 0.266667, 1)
+
+[resource]
+next_pass = SubResource("ShaderMaterial_g5ta3")
+albedo_color = Color(1, 0.796078, 0.521569, 1)

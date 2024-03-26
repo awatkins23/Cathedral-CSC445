@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://534c5s6gmgae"]
+
+[ext_resource type="AnimationLibrary" uid="uid://cwudkwv21aure" path="res://animations/piece_animations.res" id="1_wn8t6"]
+
+[node name="PieceAnimator" type="AnimationPlayer"]
+libraries = {
+"piece_animations": ExtResource("1_wn8t6")
+}

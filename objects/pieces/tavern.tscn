@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cn03dacdqwc52"]
+
+[ext_resource type="PackedScene" uid="uid://dcws0qujdfxrc" path="res://imports/pieces/Tavern.glb" id="1_2lcvi"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_gnqj5"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_4lf7t"]
+
+[node name="Tavern" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_2lcvi")]
+script = ExtResource("2_gnqj5")
+shape = Array[Vector2]([Vector2(0, 0)])
+mesh = NodePath("1Tavern")
+animator = NodePath("PieceAnimator")
+
+[node name="1Tavern" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_4lf7t")]

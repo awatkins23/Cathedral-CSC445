@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://drwsxs7rll22t"]
+
+[ext_resource type="PackedScene" uid="uid://chvmy20la674m" path="res://imports/pieces/Cathedral.glb" id="1_6f8fy"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_62ivj"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_p65ua"]
+
+[node name="Cathedral" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_6f8fy")]
+script = ExtResource("2_62ivj")
+type = 13
+shape = Array[Vector2]([Vector2(0, 0), Vector2(-1, 0), Vector2(1, 0), Vector2(0, 1), Vector2(0, 2), Vector2(0, -1)])
+mesh = NodePath("0Cathedral")
+animator = NodePath("PieceAnimator")
+
+[node name="0Cathedral" parent="." index="0"]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -1.5, 0, -1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_p65ua")]

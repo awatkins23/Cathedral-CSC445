@@ -34,3 +34,8 @@ func _on_right_pressed():
 # When the camera toggle button is clicked.
 func _on_toggle_pressed():
 	get_tree().call_group("hud", "on_toggle_camera_mode")
+
+
+func _on_tavern_pressed():
+	get_tree().call_group("board", "hud_begin_piece_placement", Globals.Piece.TAVERN)
+	pass # Replace with function body.

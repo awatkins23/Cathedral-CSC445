@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://buus63u0a8v1h"]
+
+[ext_resource type="PackedScene" uid="uid://cui0nbq1rg82w" path="res://imports/pieces/Inn.glb" id="1_qt8po"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_fnubg"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_lic5k"]
+
+[node name="Inn" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_qt8po")]
+script = ExtResource("2_fnubg")
+type = 2
+shape = Array[Vector2]([Vector2(0, 0), Vector2(1, 0), Vector2(0, 1)])
+mesh = NodePath("3Inn")
+animator = NodePath("PieceAnimator")
+
+[node name="3Inn" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_lic5k")]

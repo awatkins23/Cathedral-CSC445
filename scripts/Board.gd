@@ -3,7 +3,7 @@ extends Node3D
 ######### Export Variables #########
 @export_group("Board Config")
 @export var grid_columns: int = 10
-@export var grid_rows: int = 10 
+@export var grid_rows: int = 10
 
 @export_group("Components")
 @export var camera: Node3D
@@ -24,20 +24,20 @@ extends Node3D
 
 ######### Preload Pieces #########
 var piece_scenes: Array[PackedScene] = [
-	preload("res://objects/pieces/tavern.tscn"), # Tavern
-	null, # Stable
-	null, # Inn
-	null, # Bridge
-	null, # Square
-	null, # Manor
-	null, # Light Abbey
-	null, # Dark Abbey
-	null, # Light Academy
-	null, # Dark Academy
-	preload("res://objects/pieces/infirmary.tscn"), # Infirmary
-	null, # Castle
-	null, # Tower
-	preload("res://objects/pieces/cathedral.tscn"), # Cathedral
+	preload("res://objects/pieces/tavern.tscn"), 		# Tavern
+	preload("res://objects/pieces/stable.tscn"), 		# Stable
+	preload("res://objects/pieces/inn.tscn"), 			# Inn
+	preload("res://objects/pieces/bridge.tscn"), 		# Bridge
+	preload("res://objects/pieces/square.tscn"), 		# Square
+	preload("res://objects/pieces/manor.tscn"), 		# Manor
+	preload("res://objects/pieces/light_abbey.tscn"), 	# Light Abbey
+	preload("res://objects/pieces/dark_abbey.tscn"), 	# Dark Abbey
+	preload("res://objects/pieces/light_academy.tscn"), # Light Academy
+	preload("res://objects/pieces/dark_academy.tscn"), 	# Dark Academy
+	preload("res://objects/pieces/infirmary.tscn"), 	# Infirmary
+	preload("res://objects/pieces/castle.tscn"), 		# Castle
+	preload("res://objects/pieces/tower.tscn"), 		# Tower
+	preload("res://objects/pieces/cathedral.tscn"), 	# Cathedral
 ]
 
 ######### Script Variables #########
@@ -52,7 +52,7 @@ var placing_piece: Piece
 
 var board = [] # Array[Array[Tile]]
 var _placed_pieces: Array[Piece] = []
-
+var _current_team: Globals.Team = Globals.Team.CATHEDRAL
 ######### Children #########
 @onready var _board_node = $GridLines
 
@@ -205,6 +205,10 @@ func _end_piece_placement() -> bool:
 	
 	return status
 	
+func _cancel_piece_placement() -> void:
+	if placing_piece:
+		placing_piece.queue_free()
+	placing_piece = null
 # checks if a tile is valid
 func _is_tile_valid(pos: Vector2) -> bool:
 	# check if the tile is in bounds
@@ -236,11 +240,13 @@ func _set_selected_cell(new_cell: Vector2, piece: Piece) -> void:
 func set_mouse_position(new_pos: Vector3) -> void:
 	if placing_piece:
 		_set_selected_cell(to_cell(world_to_local(new_pos)), placing_piece)
-
+func hud_begin_piece_placement(piece: Globals.Piece) -> void:
+	_cancel_piece_placement()
+	_begin_piece_placement(piece, _current_team)
 ######### Signals #########
 func _input(event):
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if !event.is_canceled() and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			_end_piece_placement()
 
 func _ready():
@@ -256,11 +262,11 @@ func _ready():
 		board.append(row);
 	
 	# default board set up
-	_place_piece(Globals.Piece.INFIRMARY, Globals.Team.DARK, Vector2(5.0, 5.0), 0.0)
-	_place_piece(Globals.Piece.TAVERN, Globals.Team.LIGHT, Vector2(0.0, 0.0), 0.0)
-	_place_piece(Globals.Piece.TAVERN, Globals.Team.DARK, Vector2(2.0, 0.0), 0.0)
-	_place_piece(Globals.Piece.TAVERN, Globals.Team.CATHEDRAL, Vector2(3.0, 0.0), 0.0)
-	_place_piece(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL, Vector2(1.0, 1.0), 90.0)
+	#_place_piece(Globals.Piece.INFIRMARY, Globals.Team.DARK, Vector2(5.0, 5.0), 0.0)
+	#_place_piece(Globals.Piece.TAVERN, Globals.Team.LIGHT, Vector2(0.0, 0.0), 0.0)
+	#_place_piece(Globals.Piece.TAVERN, Globals.Team.DARK, Vector2(2.0, 0.0), 0.0)
+	#_place_piece(Globals.Piece.TAVERN, Globals.Team.CATHEDRAL, Vector2(3.0, 0.0), 0.0)
+	#_place_piece(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL, Vector2(1.0, 1.0), 90.0)
 	
 	# place piece
 	_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
@@ -289,4 +295,6 @@ func _process(delta):
 			_set_selected_cell(selected_cell, placing_piece)
 		if Input.is_action_just_pressed("piece_place"):
 			_end_piece_placement()
+		if Input.is_action_just_pressed("cancel_placement"):
+			_cancel_piece_placement()
 	pass

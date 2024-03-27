@@ -89,6 +89,62 @@ text = "Top Down"
 layout_mode = 2
 text = "R"
 
+[node name="Pieces" type="FlowContainer" parent="Hud"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 84.0
+grow_vertical = 2
+vertical = true
+
+[node name="Tavern" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Tavern"
+
+[node name="Stable" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Stable"
+
+[node name="Inn" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Inn"
+
+[node name="Bridge" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Bridge"
+
+[node name="Square" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Square"
+
+[node name="Manor" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Manor"
+
+[node name="Abbey" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Abbey"
+
+[node name="Academy" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Academy"
+
+[node name="Infirmary" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Infirmary"
+
+[node name="Castle" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Castle"
+
+[node name="Tower" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Tower"
+
+[node name="Cathedral" type="Button" parent="Hud/Pieces"]
+layout_mode = 2
+text = "Cathedral"
+
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.722363, -0.519719, 0.456161, -0.0448978, 0.623015, 0.78092, -0.690055, -0.584588, 0.426709, 13.3788, 23.4776, 11.6163)
 shadow_enabled = true
@@ -97,3 +153,4 @@ shadow_blur = 0.5
 [connection signal="pressed" from="Hud/FlowContainer/Left" to="Hud" method="_on_left_pressed"]
 [connection signal="pressed" from="Hud/FlowContainer/Toggle" to="Hud" method="_on_toggle_pressed"]
 [connection signal="pressed" from="Hud/FlowContainer/Right" to="Hud" method="_on_right_pressed"]
+[connection signal="pressed" from="Hud/Pieces/Tavern" to="Hud" method="_on_tavern_pressed"]

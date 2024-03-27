@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvi6k1c7ofjs4"]
+
+[ext_resource type="PackedScene" uid="uid://c7rjq3tm65svm" path="res://imports/pieces/Castle.glb" id="1_v0s44"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_yhimw"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_njpim"]
+
+[node name="Castle" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_v0s44")]
+script = ExtResource("2_yhimw")
+type = 11
+shape = Array[Vector2]([Vector2(0, 0), Vector2(0, -1), Vector2(1, -1), Vector2(0, 1), Vector2(1, 1)])
+mesh = NodePath("5Castle")
+animator = NodePath("PieceAnimator")
+
+[node name="5Castle" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_njpim")]

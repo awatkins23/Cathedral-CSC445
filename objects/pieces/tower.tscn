@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7fwbrnraiqdj"]
+
+[ext_resource type="PackedScene" uid="uid://ckawi3hr6p73e" path="res://imports/pieces/Tower.glb" id="1_cbm1f"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_puoip"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_uei2m"]
+
+[node name="Tower" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_cbm1f")]
+script = ExtResource("2_puoip")
+type = 12
+shape = Array[Vector2]([Vector2(-1, -1), Vector2(0, -1), Vector2(0, 0), Vector2(1, 0), Vector2(1, 1)])
+mesh = NodePath("5Tower")
+animator = NodePath("PieceAnimator")
+
+[node name="5Tower" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_uei2m")]

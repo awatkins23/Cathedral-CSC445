@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmh8yb8j2n3ri"]
+
+[ext_resource type="PackedScene" uid="uid://ctwjbn7du767n" path="res://imports/pieces/Abbey.glb" id="1_fqy0k"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_5mbng"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_vdt3a"]
+
+[node name="Abbey" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_fqy0k")]
+script = ExtResource("2_5mbng")
+type = 6
+shape = Array[Vector2]([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(-1, 0), Vector2(-1, -1)])
+mesh = NodePath("5Abbey")
+animator = NodePath("PieceAnimator")
+
+[node name="5Abbey" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_vdt3a")]

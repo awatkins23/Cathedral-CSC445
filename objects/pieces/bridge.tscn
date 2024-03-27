@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dltav8nmr5eyw"]
+
+[ext_resource type="PackedScene" uid="uid://kxqfym3vgvag" path="res://imports/pieces/Bridge.glb" id="1_dofei"]
+[ext_resource type="Script" path="res://scripts/Piece.gd" id="2_4k85q"]
+[ext_resource type="PackedScene" uid="uid://534c5s6gmgae" path="res://objects/piece_animator.tscn" id="3_1jnq8"]
+
+[node name="Bridge" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_dofei")]
+script = ExtResource("2_4k85q")
+type = 3
+shape = Array[Vector2]([Vector2(0, 0), Vector2(1, 0), Vector2(2, 0)])
+mesh = NodePath("3Bridge")
+animator = NodePath("PieceAnimator")
+
+[node name="3Bridge" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0.5)
+
+[node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_1jnq8")]

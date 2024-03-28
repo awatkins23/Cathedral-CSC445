@@ -52,7 +52,10 @@ var placing_piece: Piece
 
 var board = [] # Array[Array[Tile]]
 var _placed_pieces: Array[Piece] = []
-var _current_team: Globals.Team = Globals.Team.CATHEDRAL
+
+# game info
+var _current_team: Globals.Team = Globals.Team.LIGHT
+var _turn_count: int = 0
 ######### Children #########
 @onready var _board_node = $GridLines
 
@@ -240,9 +243,41 @@ func _set_selected_cell(new_cell: Vector2, piece: Piece) -> void:
 func set_mouse_position(new_pos: Vector3) -> void:
 	if placing_piece:
 		_set_selected_cell(to_cell(world_to_local(new_pos)), placing_piece)
+		
 func hud_begin_piece_placement(piece: Globals.Piece) -> void:
 	_cancel_piece_placement()
-	_begin_piece_placement(piece, _current_team)
+	match(_current_team):
+		Globals.Team.LIGHT:
+			if _turn_count == 0:
+				piece = Globals.Piece.CATHEDRAL
+				_current_team = Globals.Team.CATHEDRAL
+			else:
+				match(piece):
+					Globals.Piece.DARK_ABBEY:
+						piece = Globals.Piece.LIGHT_ABBEY
+					Globals.Piece.DARK_ACADEMY:
+						piece = Globals.Piece.LIGHT_ACADEMY
+					
+			var remaining = light_piece_counts[piece]
+			if remaining > 0:
+				light_piece_counts[piece] = remaining - 1
+				_begin_piece_placement(piece, _current_team)
+				_current_team = Globals.Team.DARK
+				_turn_count += 1 # increment turn count by one
+		Globals.Team.DARK:
+			match(piece):
+				Globals.Piece.LIGHT_ABBEY:
+					piece = Globals.Piece.DARK_ABBEY
+				Globals.Piece.LIGHT_ACADEMY:
+					piece = Globals.Piece.DARK_ACADEMY
+					
+			var remaining = dark_piece_counts[piece]
+			if remaining > 0:
+				dark_piece_counts[piece] = remaining - 1
+				_begin_piece_placement(piece, _current_team)
+				_current_team = Globals.Team.LIGHT
+				_turn_count += 1
+	
 ######### Signals #########
 func _input(event):
 	if event is InputEventMouseButton:
@@ -269,7 +304,7 @@ func _ready():
 	#_place_piece(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL, Vector2(1.0, 1.0), 90.0)
 	
 	# place piece
-	_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
+	#_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

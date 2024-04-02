@@ -21,6 +21,7 @@ extends Node3D
 @export var light_material: Material
 @export var dark_material: Material
 @export var cathedral_material: Material
+@export var error_material: Material
 
 ######### Preload Pieces #########
 var piece_scenes: Array[PackedScene] = [
@@ -44,17 +45,17 @@ var piece_scenes: Array[PackedScene] = [
 var selected_cell: Vector2
 
 # placing piece information
-var placing_piece_rotation: float
+var _placing_piece_rotation: float
 var _placing_piece_type: Globals.Piece
 var _placing_piece_min_bound: Vector2
 var _placing_piece_max_bound: Vector2
-var placing_piece: Piece
+var _placing_piece: Piece
 
-var board = [] # Array[Array[Tile]]
+var _board = [] # Array[Array[Tile]]
 var _placed_pieces: Array[Piece] = []
 
 # game info
-var _current_team: Globals.Team = Globals.Team.LIGHT
+var _current_team: Globals.Team = Globals.Team.CATHEDRAL
 var _turn_count: int = 0
 ######### Children #########
 @onready var _board_node = $GridLines
@@ -133,7 +134,7 @@ func _place_piece(type: Globals.Piece, team: Globals.Team, cell: Vector2, rotati
 	
 	# update tiles
 	for shape_offset: Vector2 in piece.get_shape_rotated(rotation):
-		board[cell.x + shape_offset.x][cell.y + shape_offset.y][2] = piece
+		_board[cell.x + shape_offset.x][cell.y + shape_offset.y][2] = piece
 	
 	# play animation
 	piece.animator.play("piece_animations/place_piece")
@@ -142,7 +143,7 @@ func _place_piece(type: Globals.Piece, team: Globals.Team, cell: Vector2, rotati
 	
 	return true
 
-func _refresh_piece_bounds(piece: Piece = placing_piece, rotation: float = 0.0) -> void:
+func _refresh_piece_bounds(piece: Piece = _placing_piece, rotation: float = 0.0) -> void:
 	var min_x: int = 0
 	var min_y: int = 0
 	var max_x: int = 0
@@ -158,7 +159,7 @@ func _refresh_piece_bounds(piece: Piece = placing_piece, rotation: float = 0.0) 
 
 func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 	# debounce
-	if placing_piece:
+	if _placing_piece:
 		return
 	
 	# set the type of the piece that we're placing
@@ -170,7 +171,7 @@ func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 		return
 
 	# reset rotation to normal
-	placing_piece_rotation = 0.0
+	_placing_piece_rotation = 0.0
 	
 	# load the piece into the scene and set it as a child of the board
 	var piece: Piece = piece_scene.instantiate()
@@ -187,31 +188,39 @@ func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 	add_child(piece)
 	
 	# set the placing piece variable
-	placing_piece = piece
+	_placing_piece = piece
+	
+	# signal on piece placement signal
+	get_tree().call_group("board", "on_piece_placement_begin", type)
 	 
 func _end_piece_placement() -> bool:
-	if !placing_piece:
+	if !_placing_piece:
 		return false
 	
+	var type = _placing_piece.type
+	
 	var status = _place_piece(
-		placing_piece.type,
-		placing_piece.team,
+		type,
+		_placing_piece.team,
 		selected_cell,
-		placing_piece_rotation
+		_placing_piece_rotation
 	)
 	
 	# delete the scene
-	placing_piece.queue_free()
+	_placing_piece.queue_free()
+	
+	# call on end
+	get_tree().call_group("board", "on_piece_placement_end", type, status)
 	
 	# reset variables
-	placing_piece = null
+	_placing_piece = null
 	
 	return status
 	
 func _cancel_piece_placement() -> void:
-	if placing_piece:
-		placing_piece.queue_free()
-	placing_piece = null
+	if _placing_piece:
+		_placing_piece.queue_free()
+	_placing_piece = null
 # checks if a tile is valid
 func _is_tile_valid(pos: Vector2) -> bool:
 	# check if the tile is in bounds
@@ -221,7 +230,7 @@ func _is_tile_valid(pos: Vector2) -> bool:
 		return false
 		
 	# check if the tile is taken
-	var tile = board[x][y]
+	var tile = _board[x][y]
 	return tile[2] == null
 
 # checks if a tile for a piece is valid
@@ -241,29 +250,48 @@ func _set_selected_cell(new_cell: Vector2, piece: Piece) -> void:
 
 ######### Board Group Signals #########
 func set_mouse_position(new_pos: Vector3) -> void:
-	if placing_piece:
-		_set_selected_cell(to_cell(world_to_local(new_pos)), placing_piece)
+	if _placing_piece:
+		_set_selected_cell(to_cell(world_to_local(new_pos)), _placing_piece)
+		
+#func on_piece_placement_begin(piece: Globals.Piece) -> void:
+#	return
+
+# called when piece placement ends
+func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
+	if !_placing_piece:
+		return
+		
+	if success:
+		match(_current_team):
+			Globals.Team.CATHEDRAL:
+				light_piece_counts[Globals.Piece.CATHEDRAL] = light_piece_counts[Globals.Piece.CATHEDRAL] - 1
+				_current_team = Globals.Team.DARK
+			Globals.Team.LIGHT:
+				light_piece_counts[piece] = light_piece_counts[piece] - 1
+				_current_team = Globals.Team.DARK
+			Globals.Team.DARK:
+				dark_piece_counts[piece] = dark_piece_counts[piece] - 1
+				_current_team = Globals.Team.LIGHT
+		
+		_turn_count += 1
 		
 func hud_begin_piece_placement(piece: Globals.Piece) -> void:
 	_cancel_piece_placement()
 	match(_current_team):
+		Globals.Team.CATHEDRAL:
+			var remaining = light_piece_counts[Globals.Piece.CATHEDRAL]
+			if remaining > 0:
+				_begin_piece_placement(Globals.Piece.CATHEDRAL, _current_team)
 		Globals.Team.LIGHT:
-			if _turn_count == 0:
-				piece = Globals.Piece.CATHEDRAL
-				_current_team = Globals.Team.CATHEDRAL
-			else:
-				match(piece):
-					Globals.Piece.DARK_ABBEY:
-						piece = Globals.Piece.LIGHT_ABBEY
-					Globals.Piece.DARK_ACADEMY:
-						piece = Globals.Piece.LIGHT_ACADEMY
+			match(piece):
+				Globals.Piece.DARK_ABBEY:
+					piece = Globals.Piece.LIGHT_ABBEY
+				Globals.Piece.DARK_ACADEMY:
+					piece = Globals.Piece.LIGHT_ACADEMY
 					
 			var remaining = light_piece_counts[piece]
 			if remaining > 0:
-				light_piece_counts[piece] = remaining - 1
 				_begin_piece_placement(piece, _current_team)
-				_current_team = Globals.Team.DARK
-				_turn_count += 1 # increment turn count by one
 		Globals.Team.DARK:
 			match(piece):
 				Globals.Piece.LIGHT_ABBEY:
@@ -273,10 +301,13 @@ func hud_begin_piece_placement(piece: Globals.Piece) -> void:
 					
 			var remaining = dark_piece_counts[piece]
 			if remaining > 0:
-				dark_piece_counts[piece] = remaining - 1
 				_begin_piece_placement(piece, _current_team)
-				_current_team = Globals.Team.LIGHT
-				_turn_count += 1
+
+func hud_end_piece_placement() -> void:
+	_end_piece_placement()
+
+func hud_cancel_piece_placement() -> void:
+	_cancel_piece_placement()
 	
 ######### Signals #########
 func _input(event):
@@ -294,7 +325,7 @@ func _ready():
 				row_n,
 				null
 			])
-		board.append(row);
+		_board.append(row);
 	
 	# default board set up
 	#_place_piece(Globals.Piece.INFIRMARY, Globals.Team.DARK, Vector2(5.0, 5.0), 0.0)
@@ -305,14 +336,22 @@ func _ready():
 	
 	# place piece
 	#_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
+	#_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if placing_piece:
+	if _placing_piece:
 		# update piece position
 		var target_pos = _get_cell_world_position(selected_cell)
-		placing_piece.position = placing_piece.position.lerp(target_pos, delta * 16)
-		placing_piece.rotation_degrees = placing_piece.rotation_degrees.lerp(Vector3(0.0, placing_piece_rotation, 0.0), delta * 16)
+		_placing_piece.position = _placing_piece.position.lerp(target_pos, delta * 16)
+		_placing_piece.rotation_degrees = _placing_piece.rotation_degrees.lerp(Vector3(0.0, _placing_piece_rotation, 0.0), delta * 16)
+		
+		# check tile validity
+		var material = _get_piece_material(_current_team)
+		if !_is_piece_tile_valid(selected_cell, _placing_piece, _placing_piece_rotation) and _placing_piece.material != error_material:
+			_placing_piece.material = error_material
+		elif _placing_piece.material != material:
+			_placing_piece.material = material
 		
 		# check inputs
 		if Input.is_action_just_pressed("piece_left") or Input.is_action_just_pressed("piece_right") or Input.is_action_just_pressed("piece_up") or Input.is_action_just_pressed("piece_down"):
@@ -323,11 +362,11 @@ func _process(delta):
 			
 			input = input.rotated(Vector3.UP, camera.rotation.y).normalized()
 
-			_set_selected_cell(Vector2(clamp(round(selected_cell.x + input.x), 0, 9), clamp(round(selected_cell.y + input.z), 0, 9)), placing_piece)
+			_set_selected_cell(Vector2(clamp(round(selected_cell.x + input.x), 0, 9), clamp(round(selected_cell.y + input.z), 0, 9)), _placing_piece)
 		if Input.is_action_just_pressed("piece_rotate"):
-			placing_piece_rotation += 90.0
-			_refresh_piece_bounds(placing_piece, placing_piece_rotation)
-			_set_selected_cell(selected_cell, placing_piece)
+			_placing_piece_rotation += 90.0
+			_refresh_piece_bounds(_placing_piece, _placing_piece_rotation)
+			_set_selected_cell(selected_cell, _placing_piece)
 		if Input.is_action_just_pressed("piece_place"):
 			_end_piece_placement()
 		if Input.is_action_just_pressed("cancel_placement"):

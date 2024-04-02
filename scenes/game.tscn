@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://db1veptgw23ou"]
+[gd_scene load_steps=10 format=3 uid="uid://db1veptgw23ou"]
 
 [ext_resource type="PackedScene" uid="uid://d1j3fk5boan6r" path="res://objects/board.tscn" id="1_m63bi"]
 [ext_resource type="Script" path="res://scripts/Camera.gd" id="2_s7kya"]
 [ext_resource type="Shader" path="res://shaders/outline-v4.gdshader" id="3_hckn8"]
 [ext_resource type="Script" path="res://scripts/Hud.gd" id="4_fggok"]
+[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/main_theme.tres" id="4_srukf"]
+[ext_resource type="Texture2D" uid="uid://7lb4wkecq7l7" path="res://images/button_texture.png" id="6_xkidf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ufyvh"]
 render_priority = 0
@@ -65,6 +67,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_srukf")
 script = ExtResource("4_fggok")
 
 [node name="FlowContainer" type="FlowContainer" parent="Hud"]
@@ -91,10 +94,14 @@ text = "R"
 
 [node name="Pieces" type="FlowContainer" parent="Hud"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 84.0
+offset_left = -85.0
+grow_horizontal = 0
 grow_vertical = 2
+alignment = 1
 vertical = true
 
 [node name="Tavern" type="Button" parent="Hud/Pieces"]
@@ -145,6 +152,12 @@ text = "Tower"
 layout_mode = 2
 text = "Cathedral"
 
+[node name="TextureRect" type="TextureRect" parent="Hud/Pieces"]
+visible = false
+layout_mode = 2
+texture = ExtResource("6_xkidf")
+expand_mode = 5
+
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.722363, -0.519719, 0.456161, -0.0448978, 0.623015, 0.78092, -0.690055, -0.584588, 0.426709, 13.3788, 23.4776, 11.6163)
 shadow_enabled = true
@@ -153,15 +166,27 @@ shadow_blur = 0.5
 [connection signal="pressed" from="Hud/FlowContainer/Left" to="Hud" method="_on_left_pressed"]
 [connection signal="pressed" from="Hud/FlowContainer/Toggle" to="Hud" method="_on_toggle_pressed"]
 [connection signal="pressed" from="Hud/FlowContainer/Right" to="Hud" method="_on_right_pressed"]
-[connection signal="pressed" from="Hud/Pieces/Tavern" to="Hud" method="_on_tavern_pressed"]
+[connection signal="button_down" from="Hud/Pieces/Tavern" to="Hud" method="_on_tavern_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Tavern" to="Hud" method="_on_tavern_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Stable" to="Hud" method="_on_stable_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Stable" to="Hud" method="_on_stable_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Inn" to="Hud" method="_on_inn_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Inn" to="Hud" method="_on_inn_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Bridge" to="Hud" method="_on_bridge_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Bridge" to="Hud" method="_on_bridge_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Square" to="Hud" method="_on_square_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Square" to="Hud" method="_on_square_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Manor" to="Hud" method="_on_manor_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Manor" to="Hud" method="_on_manor_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Abbey" to="Hud" method="_on_abbey_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Abbey" to="Hud" method="_on_abbey_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Academy" to="Hud" method="_on_academy_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Academy" to="Hud" method="_on_academy_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Infirmary" to="Hud" method="_on_infirmary_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Infirmary" to="Hud" method="_on_infirmary_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Castle" to="Hud" method="_on_castle_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Castle" to="Hud" method="_on_castle_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Tower" to="Hud" method="_on_tower_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Tower" to="Hud" method="_on_tower_button_up"]
 [connection signal="button_down" from="Hud/Pieces/Cathedral" to="Hud" method="_on_cathedral_button_down"]
+[connection signal="button_up" from="Hud/Pieces/Cathedral" to="Hud" method="_on_cathedral_button_up"]

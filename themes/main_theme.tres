@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dmnjjokglxxpx"]
+
+[ext_resource type="Texture2D" uid="uid://7lb4wkecq7l7" path="res://images/button_texture.png" id="1_oqjak"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4wtyf"]
+texture = ExtResource("1_oqjak")
+texture_margin_left = 9.0
+
+[resource]
+Button/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+Button/styles/normal = SubResource("StyleBoxTexture_4wtyf")

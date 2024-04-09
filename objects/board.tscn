@@ -29,6 +29,11 @@ script = ExtResource("1_5w5a3")
 light_material = ExtResource("2_kv3uq")
 dark_material = ExtResource("3_c1ke8")
 cathedral_material = ExtResource("4_tngwi")
+error_material = ExtResource("2_1133a")
+hover_material = ExtResource("6_xf3vx")
+light_territory_material = ExtResource("7_myuym")
+dark_territory_material = ExtResource("8_rqf3m")
+hover_territory_material = ExtResource("9_csd76")
 
 [node name="GridLines" type="MeshInstance3D" parent="."]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0)

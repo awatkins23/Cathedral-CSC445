@@ -52,14 +52,11 @@ var selected_cell: Vector2
 
 # placing piece information
 var _placing_piece_rotation: float
-var _placing_piece_rotation: float
 var _placing_piece_type: Globals.Piece
 var _placing_piece_min_bound: Vector2
 var _placing_piece_max_bound: Vector2
 var _placing_piece: Piece
-var _placing_piece: Piece
 
-var _board = [] # Array[Array[Tile]]
 var _board = [] # Array[Array[Tile]]
 var _placed_pieces: Array[Piece] = []
 var _territory_markers: Array[MeshInstance3D]
@@ -75,7 +72,6 @@ var _territories_tile_maps = [
 
 # game info
 var _current_team: Globals.Team = Globals.Team.CATHEDRAL
-var _turn_count: int = 0
 var _turn_count: int = 0
 ######### Children #########
 @onready var _board_node = $GridLines
@@ -161,7 +157,6 @@ func _place_piece(type: Globals.Piece, team: Globals.Team, cell: Vector2, rotati
 	# update tiles
 	for shape_offset: Vector2 in piece.get_shape_rotated(rotation):
 		_board[cell.x + shape_offset.x][cell.y + shape_offset.y][2] = piece
-		_board[cell.x + shape_offset.x][cell.y + shape_offset.y][2] = piece
 	
 	# play animation
 	piece.animator.play("piece_animations/place_piece")
@@ -187,7 +182,6 @@ func _refresh_piece_bounds(piece: Piece = _placing_piece, piece_rotation: float 
 func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 	# debounce
 	if _placing_piece:
-	if _placing_piece:
 		return
 	
 	# set the type of the piece that we're placing
@@ -199,7 +193,6 @@ func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 		return
 
 	# reset rotation to normal
-	_placing_piece_rotation = 0.0
 	_placing_piece_rotation = 0.0
 	
 	# load the piece into the scene and set it as a child of the board
@@ -221,27 +214,17 @@ func _begin_piece_placement(type: Globals.Piece, team: Globals.Team) -> void:
 	
 	# signal on piece placement signal
 	get_tree().call_group("board", "on_piece_placement_begin", type)
-	_placing_piece = piece
-	
-	# signal on piece placement signal
-	get_tree().call_group("board", "on_piece_placement_begin", type)
 	 
 func _end_piece_placement() -> bool:
 	if !_placing_piece:
-	if !_placing_piece:
 		return false
-	
-	var type = _placing_piece.type
 	
 	var type = _placing_piece.type
 	
 	var status = _place_piece(
 		type,
 		_placing_piece.team,
-		type,
-		_placing_piece.team,
 		selected_cell,
-		_placing_piece_rotation
 		_placing_piece_rotation
 	)
 	
@@ -250,21 +233,13 @@ func _end_piece_placement() -> bool:
 	
 	# call on end
 	get_tree().call_group("board", "on_piece_placement_end", type, status)
-	_placing_piece.queue_free()
-	
-	# call on end
-	get_tree().call_group("board", "on_piece_placement_end", type, status)
 	
 	# reset variables
-	_placing_piece = null
 	_placing_piece = null
 	
 	return status
 	
 func _cancel_piece_placement() -> void:
-	if _placing_piece:
-		_placing_piece.queue_free()
-	_placing_piece = null
 	if _placing_piece:
 		_placing_piece.queue_free()
 	_placing_piece = null
@@ -277,7 +252,6 @@ func _is_tile_valid(pos: Vector2) -> bool:
 		return false
 		
 	# check if the tile is taken
-	var tile = _board[x][y]
 	var tile = _board[x][y]
 	return tile[2] == null
 
@@ -579,7 +553,6 @@ func _ready():
 				null
 			])
 		_board.append(row);
-		_board.append(row);
 	
 	# default board set up
 	#_place_piece(Globals.Piece.INFIRMARY, Globals.Team.DARK, Vector2(5.0, 5.0), 0.0)
@@ -593,7 +566,6 @@ func _ready():
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if _placing_piece:
 	if _placing_piece:
 		# update piece position
 		var target_pos = _get_cell_world_position(selected_cell)

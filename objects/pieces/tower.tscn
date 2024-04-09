@@ -7,11 +7,11 @@
 [node name="Tower" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("1_cbm1f")]
 script = ExtResource("2_puoip")
 type = 12
-shape = Array[Vector2]([Vector2(-1, -1), Vector2(0, -1), Vector2(0, 0), Vector2(1, 0), Vector2(1, 1)])
+shape = Array[Vector2]([Vector2(0, 0), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, 1), Vector2(1, 1)])
 mesh = NodePath("5Tower")
 animator = NodePath("PieceAnimator")
 
 [node name="5Tower" parent="." index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1.5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.5, 0, 1.5)
 
 [node name="PieceAnimator" parent="." index="1" instance=ExtResource("3_uei2m")]

@@ -433,23 +433,23 @@ func set_mouse_position(new_pos: Vector3) -> void:
 
 		if has_hash and _hover_territory != tile_map[cell_hash] and !to_cell_result[1] and !_placing_piece:
 			_hover_territory = tile_map[cell_hash]
-			for cell in _territories[_current_team][_hover_territory][0]:
-				var tile = _board[cell.x][cell.y]
-				var piece = tile[2]
-				if piece and is_instance_valid(piece):
-					piece.material = hover_material
-					break
+			var territory = _territories[_current_team][_hover_territory]
+			if !territory[1]:
+				for cell in territory[0]:
+					var tile = _board[cell.x][cell.y]
+					var piece = tile[2]
+					if piece:
+						piece.material = hover_material
 			_refresh_render_territories()
 		elif (!has_hash or to_cell_result[1] or _placing_piece) and _hover_territory != -1:
 			_hover_territory = -1
 			for cell in _territories[_current_team][_hover_territory][0]:
 				var tile = _board[cell.x][cell.y]
 				var piece = tile[2]
-				if piece and is_instance_valid(piece):
+				if piece:
 					piece.material = _get_piece_material(piece.team)
-					break
 			_refresh_render_territories()
-		
+			
 #func on_piece_placement_begin(piece: Globals.Piece) -> void:
 #	return
 

@@ -73,6 +73,7 @@ var _territories_tile_maps = [
 # game info
 var _current_team: Globals.Team = Globals.Team.CATHEDRAL
 var _turn_count: int = 0
+var _cpu_game: bool = true
 ######### Children #########
 @onready var _board_node = $GridLines
 
@@ -234,15 +235,28 @@ func _end_piece_placement() -> bool:
 	# call on end
 	get_tree().call_group("board", "on_piece_placement_end", type, status)
 	
-	# reset variables
-	_placing_piece = null
-	
 	return status
 	
 func _cancel_piece_placement() -> void:
 	if _placing_piece:
 		_placing_piece.queue_free()
 	_placing_piece = null
+	
+func cpu_turn() -> void:
+	var cpuPlacedPiece: bool = false
+	var pieceAvailable: bool = false;
+	var piece: int = -1
+	while cpuPlacedPiece == false:
+		for i in range(13,-1,-1):
+			if dark_piece_counts[i] > 0:
+				piece = i
+				break;
+		if piece == -1:
+			skip_turn()
+			return
+		cpuPlacedPiece = _place_piece(piece, Globals.Team.DARK, Vector2(randi() % 10, randi() % 10), randi() % 4 * 90)
+	get_tree().call_group("board", "on_piece_placement_end", piece, cpuPlacedPiece)
+	
 # checks if a tile is valid
 func _is_tile_valid(pos: Vector2) -> bool:
 	# check if the tile is in bounds
@@ -454,10 +468,7 @@ func set_mouse_position(new_pos: Vector3) -> void:
 #	return
 
 # called when piece placement ends
-func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
-	if !_placing_piece:
-		return
-		
+func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:		
 	if success:
 		match(_current_team):
 			Globals.Team.CATHEDRAL:
@@ -483,6 +494,11 @@ func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 		# reset the hover territory
 		_hover_territory = -1
 		_refresh_render_territories()
+		
+		_placing_piece = null
+		
+		if _current_team == Globals.Team.DARK and _cpu_game:
+			cpu_turn()
 		
 func hud_begin_piece_placement(piece: Globals.Piece) -> void:
 	_cancel_piece_placement()
@@ -521,14 +537,18 @@ func hud_cancel_piece_placement() -> void:
 func hud_on_skip_turn_pressed() -> void:
 	# don't skip until after turn 4
 	if _turn_count > 4:
-		_cancel_piece_placement()
-		match(_current_team):
-			Globals.Team.LIGHT:
-				_current_team = Globals.Team.DARK
-			Globals.Team.DARK:
-				_current_team = Globals.Team.LIGHT
+		skip_turn()
+func skip_turn() -> void:
+	_cancel_piece_placement()
+	match(_current_team):
+		Globals.Team.LIGHT:
+			_current_team = Globals.Team.DARK
+		Globals.Team.DARK:
+			_current_team = Globals.Team.LIGHT
 		
-		_turn_count += 1
+	_turn_count += 1
+	if _current_team == Globals.Team.DARK and _cpu_game:
+		cpu_turn()
 	
 ######### Signals #########
 func _input(event):

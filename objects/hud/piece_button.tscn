@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://brh2niv02kg2n"]
+
+[ext_resource type="Texture2D" uid="uid://bn3sbum2uxav5" path="res://imports/textures/cathedral_tiles.png" id="1_r0qr7"]
+[ext_resource type="Script" path="res://scripts/PieceButton.gd" id="1_rgaum"]
+
+[node name="PieceButton" type="Button" groups=["hud"]]
+custom_minimum_size = Vector2(148, 34)
+text = " "
+script = ExtResource("1_rgaum")
+
+[node name="BoxContainer" type="BoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.083
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PieceName" type="Label" parent="BoxContainer"]
+layout_mode = 2
+text = "Cathedral"
+vertical_alignment = 1
+
+[node name="PieceTexture" type="TextureRect" parent="BoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+texture = ExtResource("1_r0qr7")
+expand_mode = 3
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]

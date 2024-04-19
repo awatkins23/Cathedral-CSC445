@@ -468,7 +468,8 @@ func set_mouse_position(new_pos: Vector3) -> void:
 #	return
 
 # called when piece placement ends
-func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:		
+func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
+	_placing_piece = null
 	if success:
 		match(_current_team):
 			Globals.Team.CATHEDRAL:
@@ -494,8 +495,8 @@ func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 		# reset the hover territory
 		_hover_territory = -1
 		_refresh_render_territories()
-		
-		_placing_piece = null
+
+		get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 		
 		if _current_team == Globals.Team.DARK and _cpu_game:
 			cpu_turn()
@@ -547,6 +548,8 @@ func skip_turn() -> void:
 			_current_team = Globals.Team.LIGHT
 		
 	_turn_count += 1
+	
+	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 	if _current_team == Globals.Team.DARK and _cpu_game:
 		cpu_turn()
 	
@@ -574,15 +577,7 @@ func _ready():
 			])
 		_board.append(row);
 	
-	# default board set up
-	#_place_piece(Globals.Piece.INFIRMARY, Globals.Team.DARK, Vector2(5.0, 5.0), 0.0)
-	#_place_piece(Globals.Piece.TAVERN, Globals.Team.LIGHT, Vector2(0.0, 0.0), 0.0)
-	#_place_piece(Globals.Piece.TAVERN, Globals.Team.DARK, Vector2(2.0, 0.0), 0.0)
-	#_place_piece(Globals.Piece.TAVERN, Globals.Team.CATHEDRAL, Vector2(3.0, 0.0), 0.0)
-	#_place_piece(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL, Vector2(1.0, 1.0), 90.0)
-	
-	# place piece
-	#_begin_piece_placement(Globals.Piece.CATHEDRAL, Globals.Team.CATHEDRAL)
+	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

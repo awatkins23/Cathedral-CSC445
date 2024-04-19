@@ -1,5 +1,6 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://dmnjjokglxxpx"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://dmnjjokglxxpx"]
 
+[ext_resource type="FontFile" uid="uid://jf5gpfnk38bq" path="res://imports/fonts/JockeyOne.ttf" id="1_3j5al"]
 [ext_resource type="Texture2D" uid="uid://7lb4wkecq7l7" path="res://images/button_texture.png" id="1_oqjak"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4wtyf"]
@@ -8,4 +9,7 @@ texture_margin_left = 9.0
 
 [resource]
 Button/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+Button/fonts/font = ExtResource("1_3j5al")
 Button/styles/normal = SubResource("StyleBoxTexture_4wtyf")
+Label/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+Label/fonts/font = ExtResource("1_3j5al")

@@ -264,6 +264,13 @@ func _cancel_piece_placement() -> void:
 	
 
 func cpu_turn() -> void:
+	#claim territory
+	for i in range(0,_territories[Globals.Team.DARK].size()):
+		if !_territories[Globals.Team.DARK][i][1]:
+			_claim_territory(i)
+			break
+	
+	#place piece
 	var visited_territories = []
 	var visited_tiles = []
 	for piece in range(13,-1,-1):

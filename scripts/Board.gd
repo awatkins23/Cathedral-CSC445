@@ -4,6 +4,7 @@ extends Node3D
 @export_group("Board Config")
 @export var grid_columns: int = 10
 @export var grid_rows: int = 10
+@export var _cpu_game: bool = true
 
 @export_group("Components")
 @export var camera: Node3D
@@ -65,15 +66,33 @@ var _territories = [
 	[], # dark
 	[] # light
 ]
+var _neutral_territories = []
 var _territories_tile_maps = [
 	{}, # dark
 	{} # light
 ]
 
+var PieceSizes = [
+	1,
+	2,
+	3,
+	3,
+	4,
+	4,
+	5,
+	5,
+	5,
+	5,
+	5,
+	5,
+	5,
+	6
+]
 # game info
 var _current_team: Globals.Team = Globals.Team.CATHEDRAL
 var _turn_count: int = 0
-var _cpu_game: bool = true
+var _light_finished: bool = false
+var _dark_finished: bool = false
 ######### Children #########
 @onready var _board_node = $GridLines
 
@@ -242,21 +261,56 @@ func _cancel_piece_placement() -> void:
 		_placing_piece.queue_free()
 	_placing_piece = null
 	
+
 func cpu_turn() -> void:
-	var cpuPlacedPiece: bool = false
-	var pieceAvailable: bool = false;
-	var piece: int = -1
-	while cpuPlacedPiece == false:
-		for i in range(13,-1,-1):
-			if dark_piece_counts[i] > 0:
-				piece = i
-				break;
-		if piece == -1:
-			skip_turn()
-			return
-		cpuPlacedPiece = _place_piece(piece, Globals.Team.DARK, Vector2(randi() % 10, randi() % 10), randi() % 4 * 90)
-	get_tree().call_group("board", "on_piece_placement_end", piece, cpuPlacedPiece)
-	
+	var visited_territories = []
+	var visited_tiles = []
+	for piece in range(13,-1,-1):
+		var territories = _neutral_territories.duplicate(true)
+		if dark_piece_counts[piece] < 1:
+			continue
+		for i in range(territories.size(),0,-1):
+			var index = randi() % territories.size()
+			var territory: Array = territories[index]
+			territories.remove_at(index)
+			
+			if PieceSizes[piece] > territory.size():
+				continue
+
+			for j in range(territory.size(),0,-1):
+				index = randi() % territory.size()
+				var tile: Vector2 = territory[index]
+				territory.remove_at(index)
+				for rot in range(0,4):
+					if _place_piece(piece, Globals.Team.DARK, tile, 90 * rot):
+						get_tree().call_group("board", "on_piece_placement_end", piece, true)
+						return
+						
+	skip_turn()
+
+func check_game_end(team: Globals.Team) -> bool:
+	for piece in range(13,-1,-1):
+		var territories = _neutral_territories.duplicate(true)
+		for territory in _territories[team]:
+			territories.append(territory[0].duplicate(true))
+		if team == Globals.Team.LIGHT and light_piece_counts[piece] < 1:
+			continue
+		elif team == Globals.Team.DARK and dark_piece_counts[piece] < 1:
+			continue
+		for territory in territories:	
+			if PieceSizes[piece] > territory.size():
+				continue
+			for tile in territory:
+				for rot in range(0,4):
+					var piece_scene: PackedScene = piece_scenes[piece]
+					var piece_instance: Piece = piece_scene.instantiate()
+					# check if the tile is valid
+					var result = _is_piece_tile_valid(Vector2(tile[0],tile[1]), piece_instance, 90 * rot)
+					piece_instance.queue_free()
+					if result:
+						return false
+	return true
+
 # checks if a tile is valid
 func _is_tile_valid(pos: Vector2) -> bool:
 	# check if the tile is in bounds
@@ -316,7 +370,31 @@ func _flood_fill(x: int, y: int, team: Globals.Team, visited: Dictionary):
 			area.append(new_tile)
 	
 	return [enclosed, area]
+	
+func _neutral_fill(x: int, y: int, visited: Dictionary):
+	if x < 0 or x >= grid_columns or y < 0 or y >= grid_rows:
+		return [true, []]
+		
+	var coord_hash = _hash_coord(x, y)
+	var tile = _board[x][y]
+	var tile_piece = tile[2]
 
+	if (tile_piece != null) or visited.has(coord_hash):
+		return [true, []]
+	
+	visited[coord_hash] = true
+	var area = [Vector2(x, y)]
+	var enclosed = true
+	
+	var directions = [Vector2(0, -1), Vector2(1, 0), Vector2(0, 1), Vector2(-1, 0)]
+	for direction in directions:
+		var result = _neutral_fill(x + direction.x, y + direction.y, visited)
+		enclosed = enclosed and result[0]
+		for new_tile in result[1]:
+			area.append(new_tile)
+	
+	return [enclosed, area]
+	
 func _get_territories(team: Globals.Team):
 	var visited = {}
 	var territories = []
@@ -431,6 +509,29 @@ func _update_team_territories(team: Globals.Team):
 
 	_territories[team] = new_territories
 	_territories_tile_maps[team] = _get_territories_tile_map(new_territories)
+	
+func _update_neutral_territories():
+	var visited = {}
+	var territories = []
+	
+	for territory in _territories[Globals.Team.DARK]:
+	# if territory is claimed, add it to the visited list
+		if territory[1]:
+			for tile in territory[0]:
+				visited[_hash_coord(tile.x, tile.y)] = true
+	for territory in _territories[Globals.Team.LIGHT]:
+	# if territory is claimed, add it to the visited list
+		if territory[1]:
+			for tile in territory[0]:
+				visited[_hash_coord(tile.x, tile.y)] = true
+			
+	for x in range(grid_columns):
+		for y in range(grid_rows):
+			if !visited.has(_hash_coord(x, y)):
+				var result = _neutral_fill(x, y, visited)
+				if result[1]:
+					territories.append(result[1])
+	_neutral_territories = territories
 
 ######### Board Group Signals #########
 func set_mouse_position(new_pos: Vector3) -> void:
@@ -492,12 +593,23 @@ func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 		if _turn_count >= 4:
 			_update_team_territories(Globals.Team.LIGHT)
 		
+		_update_neutral_territories()
+
 		# reset the hover territory
 		_hover_territory = -1
 		_refresh_render_territories()
 
 		get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 		
+		
+		
+		if !_dark_finished and _current_team == Globals.Team.DARK:
+			_dark_finished = check_game_end(_current_team)
+		if !_light_finished and _current_team == Globals.Team.LIGHT:
+			_light_finished = check_game_end(_current_team)
+			
+		if _light_finished and _dark_finished:
+			print("gg")
 		if _current_team == Globals.Team.DARK and _cpu_game:
 			cpu_turn()
 		
@@ -550,6 +662,15 @@ func skip_turn() -> void:
 	_turn_count += 1
 	
 	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
+	
+	if !_dark_finished and _current_team == Globals.Team.DARK:
+		_dark_finished = check_game_end(_current_team)
+	if !_light_finished and _current_team == Globals.Team.LIGHT:
+		_light_finished = check_game_end(_current_team)
+			
+	if _light_finished and _dark_finished:
+		print("gg")
+			
 	if _current_team == Globals.Team.DARK and _cpu_game:
 		cpu_turn()
 	

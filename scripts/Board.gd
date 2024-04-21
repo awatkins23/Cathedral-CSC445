@@ -4,7 +4,7 @@ extends Node3D
 @export_group("Board Config")
 @export var grid_columns: int = 10
 @export var grid_rows: int = 10
-@export var _cpu_game: bool = true
+@export var _cpu_game: bool = false
 
 @export_group("Components")
 @export var camera: Node3D
@@ -73,21 +73,21 @@ var _territories_tile_maps = [
 	{} # light
 ]
 
-var PieceSizes = [
-	1,
-	2,
-	3,
-	3,
-	4,
-	4,
-	5,
-	5,
-	5,
-	5,
-	5,
-	5,
-	5,
-	6
+var _piece_sizes = [
+	1, #Tavern
+	2, #Stable
+	3, #Inn
+	3, #Bridge
+	4, #Square
+	4, #Manor
+	5, #Light Abbey
+	5, #Dark Abbey
+	5, #Light Academy
+	5, #Dark Academy
+	5, #Infirmary
+	5, #Castle
+	5, #Tower
+	6  #Cathedral
 ]
 # game info
 var _current_team: Globals.Team = Globals.Team.CATHEDRAL
@@ -282,7 +282,7 @@ func cpu_turn() -> void:
 			var territory: Array = territories[index]
 			territories.remove_at(index)
 			
-			if PieceSizes[piece] > territory.size():
+			if _piece_sizes[piece] > territory.size():
 				continue
 
 			for j in range(territory.size(),0,-1):
@@ -293,7 +293,29 @@ func cpu_turn() -> void:
 					if _place_piece(piece, Globals.Team.DARK, tile, 90 * rot):
 						get_tree().call_group("board", "on_piece_placement_end", piece, true)
 						return
-						
+	for piece in range(13, -1, -1):
+		var territories: Array = []
+		for territory in _territories[Globals.Team.DARK]:
+			territories.append(territory[0].duplicate(true))
+		
+		if dark_piece_counts[piece] < 1:
+			continue
+		for i in range(territories.size(),0,-1):
+			var index = randi() % territories.size()
+			var territory: Array = territories[index]
+			territories.remove_at(index)
+			
+			if _piece_sizes[piece] > territory.size():
+				continue
+
+			for j in range(territory.size(),0,-1):
+				index = randi() % territory.size()
+				var tile: Vector2 = territory[index]
+				territory.remove_at(index)
+				for rot in range(0,4):
+					if _place_piece(piece, Globals.Team.DARK, tile, 90 * rot):
+						get_tree().call_group("board", "on_piece_placement_end", piece, true)
+						return
 	_dark_finished = true
 	_end_turn()
 
@@ -307,7 +329,7 @@ func check_game_end(team: Globals.Team) -> bool:
 		elif team == Globals.Team.DARK and dark_piece_counts[piece] < 1:
 			continue
 		for territory in territories:	
-			if PieceSizes[piece] > territory.size():
+			if _piece_sizes[piece] > territory.size():
 				continue
 			for tile in territory:
 				for rot in range(0,4):
@@ -509,6 +531,7 @@ func _claim_territory(territory_index: int):
 		
 		_territory_has_been_claimed = true
 		territory[1] = true
+	_update_neutral_territories()
 		
 func _update_team_territories(team: Globals.Team):
 	var new_territories = []
@@ -597,7 +620,19 @@ func _end_turn() -> void:
 		_light_finished = check_game_end(_current_team)
 	
 	if _light_finished and _dark_finished:
-		print("gg")
+		var lightScore: int = 0
+		var darkScore: int = 0
+		for i in range(0,light_piece_counts.size()):
+			lightScore += light_piece_counts[i] * _piece_sizes[i]
+		for i in range(0,dark_piece_counts.size()):
+			darkScore += dark_piece_counts[i] * _piece_sizes[i]
+		if lightScore == darkScore:
+			print("Draw")
+		elif lightScore > darkScore:
+			print("Dark Wins")
+		else:
+			print("Light Wins")
+		
 	elif _light_finished and _current_team == Globals.Team.LIGHT:
 		return _end_turn()
 	elif _dark_finished and _current_team == Globals.Team.DARK:

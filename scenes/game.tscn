@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/Camera.gd" id="2_s7kya"]
 [ext_resource type="Shader" path="res://shaders/outline-v4.gdshader" id="3_hckn8"]
 [ext_resource type="PackedScene" uid="uid://bhpktixhb2lg4" path="res://scenes/hud.tscn" id="4_mijxc"]
+[ext_resource type="Environment" uid="uid://da1i666yv18r0" path="res://objects/light_environment.tres" id="4_n07jy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ufyvh"]
 render_priority = 0
@@ -24,12 +25,6 @@ shader_parameter/grazing_angle_modulation_factor = 50.0
 material = SubResource("ShaderMaterial_ufyvh")
 flip_faces = true
 size = Vector2(100, 100)
-
-[sub_resource type="Environment" id="Environment_0cqur"]
-background_mode = 1
-background_color = Color(0.811765, 0.811765, 0.811765, 1)
-ambient_light_source = 2
-ambient_light_color = Color(1, 1, 1, 1)
 
 [node name="Game" type="Node3D"]
 
@@ -56,7 +51,7 @@ visible = false
 mesh = SubResource("QuadMesh_4mgv0")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_0cqur")
+environment = ExtResource("4_n07jy")
 
 [node name="Hud" parent="." instance=ExtResource("4_mijxc")]
 

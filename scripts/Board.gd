@@ -61,6 +61,7 @@ var _placing_piece: Piece
 var _board = [] # Array[Array[Tile]]
 var _placed_pieces: Array[Piece] = []
 var _territory_markers: Array[MeshInstance3D]
+var _territory_has_been_claimed: bool = false
 var _hover_territory: int = -1 # the index of the territory that is currently being hovered over
 var _territories = [
 	[], # dark
@@ -286,7 +287,8 @@ func cpu_turn() -> void:
 						get_tree().call_group("board", "on_piece_placement_end", piece, true)
 						return
 						
-	skip_turn()
+	_dark_finished = true
+	_end_turn()
 
 func check_game_end(team: Globals.Team) -> bool:
 	for piece in range(13,-1,-1):
@@ -476,6 +478,9 @@ func _is_territory_valid(territory, team: Globals.Team) -> bool:
 	return 1 >= opposing_piece_count
 
 func _claim_territory(territory_index: int):
+	if _territory_has_been_claimed:
+		return
+		
 	var territory = _territories[_current_team][territory_index]
 	if !territory[1]:
 		# remove piece inside of the territory
@@ -494,7 +499,8 @@ func _claim_territory(territory_index: int):
 				Globals.Team.DARK:
 					dark_piece_counts[piece.type] = dark_piece_counts[piece.type] + 1
 			piece.queue_free()
-			
+		
+		_territory_has_been_claimed = true
 		territory[1] = true
 		
 func _update_team_territories(team: Globals.Team):
@@ -569,21 +575,45 @@ func set_mouse_position(new_pos: Vector3) -> void:
 #	return
 
 # called when piece placement ends
+
+func _end_turn() -> void:
+	_placing_piece = null
+	_territory_has_been_claimed = false
+	_hover_territory = -1
+	
+	_current_team = Globals.Team.LIGHT if _current_team == Globals.Team.DARK else Globals.Team.DARK
+	_turn_count += 1
+	
+	if !_dark_finished and _current_team == Globals.Team.DARK:
+		_dark_finished = check_game_end(_current_team)
+	if !_light_finished and _current_team == Globals.Team.LIGHT:
+		_light_finished = check_game_end(_current_team)
+	
+	if _light_finished and _dark_finished:
+		print("gg")
+	elif _light_finished and _current_team == Globals.Team.LIGHT:
+		return _end_turn()
+	elif _dark_finished and _current_team == Globals.Team.DARK:
+		return _end_turn()
+
+	# reset the hover territory
+	
+	_refresh_render_territories()
+	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
+	
+	if _current_team == Globals.Team.DARK and _cpu_game:
+		cpu_turn()
+	
 func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 	_placing_piece = null
 	if success:
 		match(_current_team):
 			Globals.Team.CATHEDRAL:
 				light_piece_counts[Globals.Piece.CATHEDRAL] = light_piece_counts[Globals.Piece.CATHEDRAL] - 1
-				_current_team = Globals.Team.DARK
 			Globals.Team.LIGHT:
 				light_piece_counts[piece] = light_piece_counts[piece] - 1
-				_current_team = Globals.Team.DARK
 			Globals.Team.DARK:
 				dark_piece_counts[piece] = dark_piece_counts[piece] - 1
-				_current_team = Globals.Team.LIGHT
-		
-		_turn_count += 1
 		
 		# dark team can only claim territory after turn 3 (their second turn)
 		if _turn_count >= 3:
@@ -595,23 +625,7 @@ func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 		
 		_update_neutral_territories()
 
-		# reset the hover territory
-		_hover_territory = -1
-		_refresh_render_territories()
-
-		get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
-		
-		
-		
-		if !_dark_finished and _current_team == Globals.Team.DARK:
-			_dark_finished = check_game_end(_current_team)
-		if !_light_finished and _current_team == Globals.Team.LIGHT:
-			_light_finished = check_game_end(_current_team)
-			
-		if _light_finished and _dark_finished:
-			print("gg")
-		if _current_team == Globals.Team.DARK and _cpu_game:
-			cpu_turn()
+		return _end_turn()
 		
 func hud_begin_piece_placement(piece: Globals.Piece) -> void:
 	_cancel_piece_placement()
@@ -646,33 +660,6 @@ func hud_end_piece_placement() -> void:
 
 func hud_cancel_piece_placement() -> void:
 	_cancel_piece_placement()
-
-func hud_on_skip_turn_pressed() -> void:
-	# don't skip until after turn 4
-	if _turn_count > 4:
-		skip_turn()
-func skip_turn() -> void:
-	_cancel_piece_placement()
-	match(_current_team):
-		Globals.Team.LIGHT:
-			_current_team = Globals.Team.DARK
-		Globals.Team.DARK:
-			_current_team = Globals.Team.LIGHT
-		
-	_turn_count += 1
-	
-	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
-	
-	if !_dark_finished and _current_team == Globals.Team.DARK:
-		_dark_finished = check_game_end(_current_team)
-	if !_light_finished and _current_team == Globals.Team.LIGHT:
-		_light_finished = check_game_end(_current_team)
-			
-	if _light_finished and _dark_finished:
-		print("gg")
-			
-	if _current_team == Globals.Team.DARK and _cpu_game:
-		cpu_turn()
 	
 ######### Signals #########
 func _input(event):
@@ -698,7 +685,7 @@ func _ready():
 			])
 		_board.append(row);
 	
-	get_tree().call_group("board", "board_on_turn_begin", _turn_count, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
+	get_tree().call_group("board", "board_on_turn_begin", 0, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

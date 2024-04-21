@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://brh2niv02kg2n"]
+[gd_scene load_steps=9 format=3 uid="uid://brh2niv02kg2n"]
 
 [ext_resource type="Texture2D" uid="uid://bn3sbum2uxav5" path="res://imports/textures/cathedral_tiles.png" id="1_r0qr7"]
 [ext_resource type="Script" path="res://scripts/PieceButton.gd" id="1_rgaum"]
@@ -50,9 +50,43 @@ tracks/0/keys = {
 "values": [Vector2(0, 0), Vector2(-20, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_idb75"]
+resource_name = "piece_button_enter"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(168, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_07bt1"]
+resource_name = "piece_button_enter_default"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(168, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jirk8"]
 _data = {
 "RESET": SubResource("Animation_hfkr4"),
+"piece_button_enter": SubResource("Animation_idb75"),
+"piece_button_enter_default": SubResource("Animation_07bt1"),
 "piece_button_hover_end": SubResource("Animation_8q68u"),
 "piece_button_hover_start": SubResource("Animation_r2yb0")
 }
@@ -74,6 +108,7 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 20.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"PieceButton"
@@ -92,6 +127,7 @@ grow_vertical = 2
 
 [node name="PieceName" type="Label" parent="Button/BoxContainer"]
 layout_mode = 2
+theme_type_variation = &"PieceButtonLabel"
 text = "Cathedral"
 vertical_alignment = 1
 
@@ -101,9 +137,12 @@ size_flags_horizontal = 10
 texture = ExtResource("1_r0qr7")
 expand_mode = 3
 
+[node name="EnterTimer" type="Timer" parent="."]
+
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
 [connection signal="button_up" from="Button" to="." method="_on_button_button_up"]
 [connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
 [connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]
 [connection signal="mouse_entered" from="Button" to="." method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="Button" to="." method="_on_button_mouse_exited"]
+[connection signal="timeout" from="EnterTimer" to="." method="_on_enter_timer_timeout"]

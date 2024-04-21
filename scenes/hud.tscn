@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhpktixhb2lg4"]
+[gd_scene load_steps=7 format=3 uid="uid://bhpktixhb2lg4"]
 
-[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/main_theme.tres" id="1_rj8s0"]
+[ext_resource type="Theme" uid="uid://dd4ircea1chno" path="res://themes/dark_theme.tres" id="1_ea30f"]
 [ext_resource type="Script" path="res://scripts/Hud.gd" id="2_imea3"]
+[ext_resource type="Texture2D" uid="uid://dxmumc6qpppcy" path="res://imports/icons/rotate_left.png" id="3_iase3"]
+[ext_resource type="Texture2D" uid="uid://ccl6xda73sosn" path="res://imports/icons/camera.png" id="4_rltly"]
+[ext_resource type="Texture2D" uid="uid://c1bpumiv6pwd4" path="res://imports/icons/rotate_right.png" id="5_0gumd"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5nfoj"]
+font_size = 18
+font_color = Color(0.0431373, 0.0431373, 0.0431373, 1)
 
 [node name="Hud" type="Control" groups=["board", "camera", "hud"]]
 layout_mode = 3
@@ -10,34 +17,96 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_rj8s0")
+theme = ExtResource("1_ea30f")
 script = ExtResource("2_imea3")
 
-[node name="FlowContainer" type="FlowContainer" parent="."]
+[node name="Keybinds" type="Label" parent="."]
 layout_mode = 1
-anchors_preset = 12
+anchors_preset = -1
+anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -23.0
+offset_left = -87.0
+offset_top = -26.0
+offset_right = -8.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "[R] Rotate Piece | [X] Cancel Placement | [C] Toggle Camera | [Q/E] Rotate Camera"
+label_settings = SubResource("LabelSettings_5nfoj")
+horizontal_alignment = 2
+
+[node name="CameraControls" type="BoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -48.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Left" type="Button" parent="FlowContainer"]
+[node name="Left" type="Button" parent="CameraControls"]
+custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-text = "L"
+size_flags_vertical = 8
+theme_type_variation = &"IconButton"
 
-[node name="Toggle" type="Button" parent="FlowContainer"]
-layout_mode = 2
-text = "Top Down"
+[node name="Icon" type="TextureRect" parent="CameraControls/Left"]
+modulate = Color(0.372549, 0.223529, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_iase3")
 
-[node name="Right" type="Button" parent="FlowContainer"]
+[node name="Toggle" type="Button" parent="CameraControls"]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
-text = "R"
+theme_type_variation = &"IconButton"
 
-[node name="Skip" type="Button" parent="FlowContainer"]
+[node name="Icon" type="TextureRect" parent="CameraControls/Toggle"]
+modulate = Color(0.372549, 0.223529, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_rltly")
+
+[node name="Right" type="Button" parent="CameraControls"]
+custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
-text = "Skip Turn"
+size_flags_vertical = 8
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="TextureRect" parent="CameraControls/Right"]
+modulate = Color(0.372549, 0.223529, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_0gumd")
 
 [node name="PieceButtons" type="FlowContainer" parent="."]
 layout_mode = 1
@@ -51,7 +120,21 @@ grow_vertical = 2
 alignment = 1
 vertical = true
 
-[connection signal="pressed" from="FlowContainer/Left" to="." method="_on_left_pressed"]
-[connection signal="pressed" from="FlowContainer/Toggle" to="." method="_on_toggle_pressed"]
-[connection signal="pressed" from="FlowContainer/Right" to="." method="_on_right_pressed"]
-[connection signal="pressed" from="FlowContainer/Skip" to="." method="_on_skip_pressed"]
+[node name="Stats" type="FlowContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.98
+offset_left = 8.0
+offset_top = 5.0
+offset_right = 10.0
+offset_bottom = 30.0
+grow_horizontal = 2
+
+[node name="TurnStatus" type="Label" parent="Stats"]
+layout_mode = 2
+text = "Light - Turn 0"
+label_settings = SubResource("LabelSettings_5nfoj")
+
+[connection signal="pressed" from="CameraControls/Left" to="." method="_on_left_pressed"]
+[connection signal="pressed" from="CameraControls/Toggle" to="." method="_on_toggle_pressed"]
+[connection signal="pressed" from="CameraControls/Right" to="." method="_on_right_pressed"]

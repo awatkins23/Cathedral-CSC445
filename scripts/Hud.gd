@@ -48,18 +48,27 @@ var _piece_names = [
 	"Cathedral"
 ]
 
+var _team_names = [
+	"Dark",
+	"Light",
+	"Light"
+]
+
 var _piece_tile_colors = [
-	Color("ffd28f"),
 	Color("5f3900"),
+	Color("ffd28f"),
 	Color("7b7b7b")
 ]
 
 var _piece_button = preload("res://objects/hud/piece_button.tscn")
 var _loaded_buttons: Array[Control] = []
 
+# format strings
+var _turn_status_format_string = "%s - Turn %s"
+
 ######### Children #########
-@onready var toggle_camera_button = $FlowContainer/Toggle
 @onready var _piece_buttons_container = $PieceButtons
+@onready var _turn_status_label = $Stats/TurnStatus
 
 ######### Functions #########
 func _begin_click(piece_type: Globals.Piece) -> void:
@@ -91,7 +100,7 @@ func _end_click() -> void:
 		
 	_clicking_piece = false
 
-func _create_piece_button(piece: Globals.Piece) -> void:
+func _create_piece_button(piece: Globals.Piece, enter_delay: float) -> void:
 	var button = _piece_button.instantiate()
 	
 	# set properties
@@ -99,6 +108,7 @@ func _create_piece_button(piece: Globals.Piece) -> void:
 	button.piece_name = _piece_names[piece]
 	button.texture = _piece_tile_textures[piece]
 	button.texture_color = _piece_tile_colors[_current_team]
+	button.enter_animation_delay = enter_delay
 	
 	# add to the container
 	_piece_buttons_container.add_child(button)
@@ -119,28 +129,24 @@ func _load_piece_buttons() -> void:
 		
 	# load new piece buttons
 	if _current_team == 2:
-		_create_piece_button(Globals.Piece.CATHEDRAL)
+		_create_piece_button(Globals.Piece.CATHEDRAL, 0.0)
 	else:
 		var piece = 0
+		var button_n = 0
 		for count in _piece_counts:
 			for n in range(count):
-				_create_piece_button(piece)
+				_create_piece_button(piece, 0.02 * button_n)
+				button_n += 1
 			piece += 1
-
-######### Camera Group Signals #########
-func on_camera_mode_changed(new_mode: bool) -> void:
-	_default_toggle_text = "Top Down" if new_mode else "Isometric"
-	if _is_ready:
-		toggle_camera_button.text = _default_toggle_text
 
 ######### Board Group Signals #########
 func board_on_turn_begin(turn_count: int, team: Globals.Team, piece_counts: Array[int]):
 	_turn_count = turn_count
 	_current_team = team
 	_piece_counts = piece_counts
-	
 	if _is_ready:
 		_load_piece_buttons()
+		_turn_status_label.text = _turn_status_format_string % [_team_names[team], _turn_count + 1]
 
 ######### HUD Group Signals #########
 func hud_on_piece_button_down(piece_type: Globals.Piece):
@@ -165,9 +171,10 @@ func _input(event):
 ## Called when the node enters the scene tree for the first time.
 func _ready():
 	_is_ready = true
-	toggle_camera_button.text = _default_toggle_text
 	
 	_load_piece_buttons()
+	# set turn status label text
+	_turn_status_label.text = _turn_status_format_string % [_team_names[_current_team], _turn_count + 1]
 
 # When the camera rotate left button is clicked.
 func _on_left_pressed():
@@ -180,6 +187,3 @@ func _on_right_pressed():
 # When the camera toggle button is clicked.
 func _on_toggle_pressed():
 	get_tree().call_group("hud", "on_toggle_camera_mode")
-
-func _on_skip_pressed():
-	get_tree().call_group("hud", "hud_on_skip_turn_pressed")

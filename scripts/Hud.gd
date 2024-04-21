@@ -55,7 +55,7 @@ var _piece_tile_colors = [
 ]
 
 var _piece_button = preload("res://objects/hud/piece_button.tscn")
-var _loaded_buttons: Array[Button] = []
+var _loaded_buttons: Array[Control] = []
 
 ######### Children #########
 @onready var toggle_camera_button = $FlowContainer/Toggle

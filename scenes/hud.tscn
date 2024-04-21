@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhpktixhb2lg4"]
 
-[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/main_theme.tres" id="1_4yvlo"]
+[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/main_theme.tres" id="1_rj8s0"]
 [ext_resource type="Script" path="res://scripts/Hud.gd" id="2_imea3"]
 
 [node name="Hud" type="Control" groups=["board", "camera", "hud"]]
@@ -10,7 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_4yvlo")
+theme = ExtResource("1_rj8s0")
 script = ExtResource("2_imea3")
 
 [node name="FlowContainer" type="FlowContainer" parent="."]

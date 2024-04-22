@@ -72,6 +72,7 @@ var _turn_status_format_string = "%s - Turn %s"
 
 ######### Functions #########
 func _begin_click(piece_type: Globals.Piece) -> void:
+	$SelectStream.play()
 	# debounce
 	if _clicking_piece:
 		return
@@ -178,12 +179,15 @@ func _ready():
 
 # When the camera rotate left button is clicked.
 func _on_left_pressed():
+	$SelectStream.play()
 	get_tree().call_group("hud", "on_left_pressed")
 
 # When the camera rotate right button is clicked.
 func _on_right_pressed():
+	$SelectStream.play()
 	get_tree().call_group("hud", "on_right_pressed")
 
 # When the camera toggle button is clicked.
 func _on_toggle_pressed():
+	$SelectStream.play()
 	get_tree().call_group("hud", "on_toggle_camera_mode")

@@ -48,6 +48,7 @@ var piece_scenes: Array[PackedScene] = [
 
 var _territory_marker = preload("res://objects/board_territory_marker.tscn")
 
+var _place_piece_sound = preload("res://imports/sounds/placetilesound.mp3")
 ######### Script Variables #########
 var selected_cell: Vector2
 
@@ -181,6 +182,8 @@ func _place_piece(type: Globals.Piece, team: Globals.Team, cell: Vector2, rotati
 	
 	# play animation
 	piece.animator.play("piece_animations/place_piece")
+	if !(_current_team == Globals.Team.DARK and _cpu_game):
+		$TileSounds.play()
 	# add to board
 	add_child(piece)
 	
@@ -726,6 +729,8 @@ func _ready():
 				null
 			])
 		_board.append(row);
+		
+	$TileSounds.stream = _place_piece_sound
 	
 	get_tree().call_group("board", "board_on_turn_begin", 0, _current_team, light_piece_counts if _current_team == Globals.Team.LIGHT else dark_piece_counts )
 	

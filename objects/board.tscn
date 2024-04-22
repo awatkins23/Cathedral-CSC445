@@ -26,6 +26,7 @@ material = SubResource("ShaderMaterial_cggw5")
 
 [node name="Board" type="Node3D" groups=["board", "hud"]]
 script = ExtResource("1_5w5a3")
+_cpu_game = true
 light_material = ExtResource("2_kv3uq")
 dark_material = ExtResource("3_c1ke8")
 cathedral_material = ExtResource("4_tngwi")
@@ -38,3 +39,5 @@ hover_territory_material = ExtResource("9_csd76")
 [node name="GridLines" type="MeshInstance3D" parent="."]
 transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0)
 mesh = SubResource("QuadMesh_yyyfi")
+
+[node name="TileSounds" type="AudioStreamPlayer" parent="."]

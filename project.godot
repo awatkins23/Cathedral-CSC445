@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="Cathedral"
-run/main_scene="res://scenes/game.tscn"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://images/icon.svg"
+
+[autoload]
+
+SceneSwitcher="*res://scenes/scene_switcher.tscn"
 
 [display]
 

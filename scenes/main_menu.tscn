@@ -1,0 +1,915 @@
+[gd_scene load_steps=26 format=3 uid="uid://t08pq4emsohg"]
+
+[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/light_theme.tres" id="1_ja36y"]
+[ext_resource type="Environment" uid="uid://da1i666yv18r0" path="res://objects/light_environment.tres" id="1_m7bet"]
+[ext_resource type="Script" path="res://scripts/MainMenuHUD.gd" id="2_7ur2i"]
+[ext_resource type="AudioStream" uid="uid://ctrgxqhdo51hh" path="res://imports/sounds/select.mp3" id="3_nuljs"]
+[ext_resource type="AudioStream" uid="uid://5fg2t7rnhvj" path="res://imports/sounds/turkish_march.mp3" id="4_qgu0v"]
+[ext_resource type="PackedScene" uid="uid://bmh8yb8j2n3ri" path="res://objects/pieces/light_abbey.tscn" id="6_os1di"]
+[ext_resource type="Shader" path="res://shaders/grid.gdshader" id="7_hm48q"]
+[ext_resource type="Material" uid="uid://b63d1csx53wan" path="res://materials/DarkPiece.tres" id="7_w8s61"]
+[ext_resource type="PackedScene" uid="uid://b7fwbrnraiqdj" path="res://objects/pieces/tower.tscn" id="8_j7coh"]
+[ext_resource type="Material" uid="uid://sqg68hnguct1" path="res://materials/LightPiece.tres" id="9_5474m"]
+[ext_resource type="PackedScene" uid="uid://0ib72auly8qh" path="res://objects/pieces/infirmary.tscn" id="10_0fbpt"]
+[ext_resource type="PackedScene" uid="uid://cvi6k1c7ofjs4" path="res://objects/pieces/castle.tscn" id="11_myrq5"]
+[ext_resource type="PackedScene" uid="uid://bq0352jaqpi6r" path="res://objects/pieces/manor.tscn" id="12_3qdwp"]
+[ext_resource type="PackedScene" uid="uid://d0pbl0dr02cvu" path="res://objects/pieces/square.tscn" id="13_rbos0"]
+[ext_resource type="PackedScene" uid="uid://buus63u0a8v1h" path="res://objects/pieces/inn.tscn" id="14_fi36c"]
+[ext_resource type="PackedScene" uid="uid://dltav8nmr5eyw" path="res://objects/pieces/bridge.tscn" id="15_mi437"]
+[ext_resource type="PackedScene" uid="uid://il4yr2q41lom" path="res://objects/pieces/dark_academy.tscn" id="16_ukaeg"]
+[ext_resource type="PackedScene" uid="uid://ehw5gcr4rat2" path="res://objects/pieces/light_academy.tscn" id="17_sdd5j"]
+[ext_resource type="PackedScene" uid="uid://bgh2jtuylg7ft" path="res://objects/pieces/stable.tscn" id="18_iqceg"]
+[ext_resource type="PackedScene" uid="uid://bvq6n8a06y2sw" path="res://objects/board_territory_marker.tscn" id="19_fpoxu"]
+[ext_resource type="PackedScene" uid="uid://cn03dacdqwc52" path="res://objects/pieces/tavern.tscn" id="19_xrrfl"]
+[ext_resource type="Material" uid="uid://dabgc1fbx2ewc" path="res://materials/light_territory.tres" id="21_ba1wl"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_87hn5"]
+font_size = 80
+font_color = Color(1, 0.823529, 0.560784, 1)
+outline_size = 20
+outline_color = Color(0.372549, 0.223529, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cggw5"]
+render_priority = 0
+shader = ExtResource("7_hm48q")
+shader_parameter/size = Vector2(540, 540)
+shader_parameter/line_width = 0.05
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/grid_size = 54.0
+shader_parameter/line_color = Color(0.654902, 0.654902, 0.654902, 1)
+shader_parameter/bg_color = Color(0.690196, 0.690196, 0.690196, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_jiday"]
+material = SubResource("ShaderMaterial_cggw5")
+
+[node name="MainMenu" type="Node3D"]
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00355625, 6.51461, -4.21974)
+projection = 1
+size = 11.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_m7bet")
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ja36y")
+script = ExtResource("2_7ur2i")
+
+[node name="CenterContainer" type="VBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/CenterContainer"]
+layout_mode = 2
+text = "CATHEDRAL"
+label_settings = SubResource("LabelSettings_87hn5")
+horizontal_alignment = 1
+
+[node name="Padding3" type="Control" parent="HUD/CenterContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="SingleplayerButton" type="Button" parent="HUD/CenterContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+text = "Singleplayer"
+
+[node name="Padding2" type="Control" parent="HUD/CenterContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MultiplayerButton" type="Button" parent="HUD/CenterContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+text = "Multiplayer"
+
+[node name="SelectSoundPlayer" type="AudioStreamPlayer" parent="HUD"]
+stream = ExtResource("3_nuljs")
+volume_db = 5.6
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_qgu0v")
+volume_db = -12.51
+autoplay = true
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="Pieces" type="Node3D" parent="World"]
+
+[node name="Abbey" parent="World/Pieces" instance=ExtResource("6_os1di")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -0.5)
+material = ExtResource("7_w8s61")
+
+[node name="Tower" parent="World/Pieces" instance=ExtResource("8_j7coh")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.5, 0, -3.5)
+material = ExtResource("9_5474m")
+
+[node name="Tower3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("8_j7coh")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 6.5, 0, 1.5)
+mesh = NodePath("../Tower/5Tower")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Tower/PieceAnimator")
+
+[node name="Tower5" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("8_j7coh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, -9.5)
+mesh = NodePath("../Tower/5Tower")
+material = ExtResource("9_5474m")
+animator = NodePath("../Tower/PieceAnimator")
+
+[node name="Tower2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("8_j7coh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, 1.5)
+mesh = NodePath("../Tower/5Tower")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Tower/PieceAnimator")
+
+[node name="Tower4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("8_j7coh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -9.5)
+mesh = NodePath("../Tower/5Tower")
+material = ExtResource("9_5474m")
+animator = NodePath("../Tower/PieceAnimator")
+
+[node name="Infirmary" parent="World/Pieces" instance=ExtResource("10_0fbpt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -7.5)
+material = ExtResource("9_5474m")
+
+[node name="Infirmary2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("10_0fbpt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -3.5)
+mesh = NodePath("../Infirmary/5Infirmary")
+material = ExtResource("9_5474m")
+animator = NodePath("../Infirmary/PieceAnimator")
+
+[node name="Castle" parent="World/Pieces" instance=ExtResource("11_myrq5")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.5, 0, -8.5)
+material = ExtResource("9_5474m")
+
+[node name="Castle2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("11_myrq5")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, 0, -0.5)
+mesh = NodePath("../Castle/5Castle")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Castle/PieceAnimator")
+
+[node name="Castle3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("11_myrq5")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.5, 0, -4.5)
+mesh = NodePath("../Castle/5Castle")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Castle/PieceAnimator")
+
+[node name="Manor" parent="World/Pieces" instance=ExtResource("12_3qdwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -4.5)
+material = ExtResource("9_5474m")
+
+[node name="Manor3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("12_3qdwp")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 9.5, 0, -4.5)
+mesh = NodePath("../Manor/4Manor")
+material = ExtResource("9_5474m")
+animator = NodePath("../Manor/PieceAnimator")
+
+[node name="Square" parent="World/Pieces" instance=ExtResource("13_rbos0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -5.5)
+material = ExtResource("9_5474m")
+
+[node name="Square3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("13_rbos0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -9.5)
+mesh = NodePath("../Square/4Square")
+material = ExtResource("9_5474m")
+animator = NodePath("../Square/PieceAnimator")
+
+[node name="Square2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("13_rbos0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, -2.5)
+mesh = NodePath("../Square/4Square")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Square/PieceAnimator")
+
+[node name="Square4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("13_rbos0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, -8.5)
+mesh = NodePath("../Square/4Square")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Square/PieceAnimator")
+
+[node name="Inn" parent="World/Pieces" instance=ExtResource("14_fi36c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -8.5)
+material = ExtResource("9_5474m")
+
+[node name="Inn5" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("14_fi36c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -7.5, 0, -7.5)
+mesh = NodePath("../Inn/3Inn")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Inn/PieceAnimator")
+
+[node name="Inn6" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("14_fi36c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -9.5, 0, -3.5)
+mesh = NodePath("../Inn/3Inn")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Inn/PieceAnimator")
+
+[node name="Inn3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("14_fi36c")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.5, 0, 0.5)
+mesh = NodePath("../Inn/3Inn")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Inn/PieceAnimator")
+
+[node name="Inn4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("14_fi36c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, -10.5)
+mesh = NodePath("../Inn/3Inn")
+material = ExtResource("9_5474m")
+animator = NodePath("../Inn/PieceAnimator")
+
+[node name="Bridge" parent="World/Pieces" instance=ExtResource("15_mi437")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -7.5)
+material = ExtResource("9_5474m")
+
+[node name="Bridge2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("15_mi437")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.5, 0, -4.5)
+mesh = NodePath("../Bridge/3Bridge")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Bridge/PieceAnimator")
+
+[node name="Bridge4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("15_mi437")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 0, -7.5)
+mesh = NodePath("../Bridge/3Bridge")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Bridge/PieceAnimator")
+
+[node name="Bridge3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("15_mi437")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 0, -0.5)
+mesh = NodePath("../Bridge/3Bridge")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Bridge/PieceAnimator")
+
+[node name="Academy" parent="World/Pieces" instance=ExtResource("16_ukaeg")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4.5, 0, -5.5)
+material = ExtResource("7_w8s61")
+
+[node name="Academy2" parent="World/Pieces" instance=ExtResource("17_sdd5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -1.5)
+material = ExtResource("9_5474m")
+
+[node name="Inn2" parent="World/Pieces" instance=ExtResource("14_fi36c")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -1.5, 0, 2.5)
+material = ExtResource("7_w8s61")
+
+[node name="Manor2" parent="World/Pieces" instance=ExtResource("12_3qdwp")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.5, 0, -1.5)
+material = ExtResource("7_w8s61")
+
+[node name="Stable" parent="World/Pieces" instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 1.5)
+material = ExtResource("7_w8s61")
+
+[node name="Stable4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, -8.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("9_5474m")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable5" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, -8.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("9_5474m")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable8" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0, -6.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("9_5474m")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -9.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("9_5474m")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable6" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0, -7.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable7" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 0.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable9" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -3.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Stable2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("18_iqceg")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 8.5, 0, -2.5)
+mesh = NodePath("../Stable/2Stable")
+material = ExtResource("9_5474m")
+animator = NodePath("../Stable/PieceAnimator")
+
+[node name="Abbey2" parent="World/Pieces" instance=ExtResource("6_os1di")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0, -6.5)
+material = ExtResource("9_5474m")
+
+[node name="Tavern" parent="World/Pieces" instance=ExtResource("19_xrrfl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, -0.5)
+material = ExtResource("9_5474m")
+
+[node name="Tavern4" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("19_xrrfl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0, 1.5)
+mesh = NodePath("../Tavern/1Tavern")
+material = ExtResource("9_5474m")
+animator = NodePath("../Tavern/PieceAnimator")
+
+[node name="Tavern2" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("19_xrrfl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, -6.5)
+mesh = NodePath("../Tavern/1Tavern")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Tavern/PieceAnimator")
+
+[node name="Tavern5" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("19_xrrfl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0, -7.5)
+mesh = NodePath("../Tavern/1Tavern")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Tavern/PieceAnimator")
+
+[node name="Tavern3" parent="World/Pieces" node_paths=PackedStringArray("mesh", "animator") instance=ExtResource("19_xrrfl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 1.5)
+mesh = NodePath("../Tavern/1Tavern")
+material = ExtResource("7_w8s61")
+animator = NodePath("../Tavern/PieceAnimator")
+
+[node name="Grid" type="Node3D" parent="World"]
+
+[node name="GridLines" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, 0)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="GridLines2" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, -10, 0, 0)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="GridLines3" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, -10, 0, -10)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="GridLines4" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 0, 0, -10)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="GridLines5" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 10, 0, 0)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="GridLines6" type="MeshInstance3D" parent="World/Grid"]
+transform = Transform3D(10, 0, 0, 0, -4.37114e-07, 10, 0, -10, -4.37114e-07, 10, 0, -10)
+mesh = SubResource("QuadMesh_jiday")
+skeleton = NodePath("../..")
+
+[node name="Territories" type="Node3D" parent="World"]
+
+[node name="BoardTerritoryMarker" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker2" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -2.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker3" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker4" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -3.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker7" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+
+[node name="BoardTerritoryMarker8" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker59" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -6.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker60" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker61" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker62" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -7.5)
+
+[node name="BoardTerritoryMarker63" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -7.5)
+
+[node name="BoardTerritoryMarker64" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker65" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -5.5)
+
+[node name="BoardTerritoryMarker66" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -5.5)
+
+[node name="BoardTerritoryMarker67" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -4.5)
+
+[node name="BoardTerritoryMarker68" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, -4.5)
+
+[node name="BoardTerritoryMarker9" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker10" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker40" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker41" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker42" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker43" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker44" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 2.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker45" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker11" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker12" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 2.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker13" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker14" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 3.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker15" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker16" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 4.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker17" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker20" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker21" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker22" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker23" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker24" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker25" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker46" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker47" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker48" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker49" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker50" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker51" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker52" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker53" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker54" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker55" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -6.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker56" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker57" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker26" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker27" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker28" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, 1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker29" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, 2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker30" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker31" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 8.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker32" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker33" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker37" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -4.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker38" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, -5.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker39" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 7.5, 0.01, -5.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker34" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker35" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, 1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker85" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, 1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker86" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, 2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker87" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker88" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker89" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker90" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker91" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -3.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker92" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -4.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker93" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -5.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker94" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -6.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker95" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker96" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker97" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker98" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, 1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker99" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, 2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker100" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker101" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker102" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker103" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker104" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -3.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker105" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -4.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker106" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -5.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker107" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -6.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker108" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker109" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker110" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker111" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, 1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker112" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, 2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker113" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, 0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker114" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -0.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker115" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -1.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker116" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker117" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -3.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker118" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -4.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker119" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -5.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker120" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -6.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker121" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -8.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker122" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -7.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker123" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 12.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker36" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 9.5, 0.01, 2.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker18" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker58" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -5.5, 0.01, -9.5)
+surface_material_override/0 = ExtResource("21_ba1wl")
+
+[node name="BoardTerritoryMarker19" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 6.5, 0.01, 2.5)
+
+[node name="BoardTerritoryMarker5" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -4.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker6" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -4.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker69" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -6.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker70" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker71" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker72" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -6.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker73" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -6.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker74" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker75" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker76" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker77" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker124" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker125" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker126" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -1.5)
+
+[node name="BoardTerritoryMarker127" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker128" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -3.5)
+
+[node name="BoardTerritoryMarker129" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -2.5)
+
+[node name="BoardTerritoryMarker130" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -5.5)
+
+[node name="BoardTerritoryMarker131" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -4.5)
+
+[node name="BoardTerritoryMarker132" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -7.5)
+
+[node name="BoardTerritoryMarker133" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker134" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -9.5)
+
+[node name="BoardTerritoryMarker135" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -10.5, 0.01, -8.5)
+
+[node name="BoardTerritoryMarker136" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, 0.5)
+
+[node name="BoardTerritoryMarker137" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, 1.5)
+
+[node name="BoardTerritoryMarker138" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -1.5)
+
+[node name="BoardTerritoryMarker139" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -0.5)
+
+[node name="BoardTerritoryMarker140" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -3.5)
+
+[node name="BoardTerritoryMarker141" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -2.5)
+
+[node name="BoardTerritoryMarker142" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -5.5)
+
+[node name="BoardTerritoryMarker143" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -4.5)
+
+[node name="BoardTerritoryMarker144" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -7.5)
+
+[node name="BoardTerritoryMarker145" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -6.5)
+
+[node name="BoardTerritoryMarker146" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -9.5)
+
+[node name="BoardTerritoryMarker147" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -11.5, 0.01, -8.5)
+
+[node name="BoardTerritoryMarker78" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -1.5)
+
+[node name="BoardTerritoryMarker79" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -9.5, 0.01, -2.5)
+
+[node name="BoardTerritoryMarker80" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -2.5)
+
+[node name="BoardTerritoryMarker81" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -8.5, 0.01, -1.5)
+
+[node name="BoardTerritoryMarker82" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, -1.5)
+
+[node name="BoardTerritoryMarker83" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -7.5, 0.01, -2.5)
+
+[node name="BoardTerritoryMarker84" parent="World/Territories" instance=ExtResource("19_fpoxu")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -6.5, 0.01, -2.5)
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.722363, -0.519719, 0.456162, -0.0448978, 0.623015, 0.78092, -0.690055, -0.584588, 0.426709, 13.3788, 23.4776, 11.6163)
+shadow_enabled = true
+shadow_blur = 0.5
+
+[connection signal="pressed" from="HUD/CenterContainer/SingleplayerButton" to="HUD" method="_on_singleplayer_button_pressed"]
+[connection signal="pressed" from="HUD/CenterContainer/MultiplayerButton" to="HUD" method="_on_singleplayer_button_2_pressed"]

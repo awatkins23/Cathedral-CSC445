@@ -11,7 +11,7 @@
 [ext_resource type="Material" uid="uid://vd5gw3gn11dn" path="res://materials/dark_territory.tres" id="8_rqf3m"]
 [ext_resource type="Material" uid="uid://b86dtak1ch06w" path="res://materials/hover_territory.tres" id="9_csd76"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_cggw5"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_crur5"]
 render_priority = 0
 shader = ExtResource("1_1mt5d")
 shader_parameter/size = Vector2(540, 540)
@@ -22,7 +22,7 @@ shader_parameter/line_color = Color(0.654902, 0.654902, 0.654902, 1)
 shader_parameter/bg_color = Color(0.690196, 0.690196, 0.690196, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_yyyfi"]
-material = SubResource("ShaderMaterial_cggw5")
+material = SubResource("ShaderMaterial_crur5")
 
 [node name="Board" type="Node3D" groups=["board", "hud"]]
 script = ExtResource("1_5w5a3")

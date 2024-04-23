@@ -1,25 +1,53 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://dmnjjokglxxpx"]
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://dmnjjokglxxpx"]
 
 [ext_resource type="FontFile" uid="uid://jf5gpfnk38bq" path="res://imports/fonts/JockeyOne.ttf" id="1_3j5al"]
-[ext_resource type="Texture2D" uid="uid://d24x4ws204aoj" path="res://imports/textures/piece_button_texture.png" id="1_kx5rg"]
+[ext_resource type="Texture2D" uid="uid://4vwasui0el6o" path="res://imports/textures/text_button_texture.png" id="1_a7sw6"]
 [ext_resource type="StyleBox" uid="uid://bgqheeiydw6x6" path="res://themes/icon_button_style_box_texture.tres" id="2_c4s8f"]
+[ext_resource type="StyleBox" uid="uid://dr0mve4b4rs38" path="res://themes/text_button_style_box_texture.tres" id="2_epqms"]
 [ext_resource type="StyleBox" uid="uid://xn2xldccho56" path="res://themes/piece_button_style_box_texture.tres" id="2_evrn2"]
 [ext_resource type="Texture2D" uid="uid://bc143jtgh03ta" path="res://imports/textures/button_texture.png" id="2_mph3o"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ta1v6"]
-texture = ExtResource("1_kx5rg")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uqj48"]
+texture = ExtResource("1_a7sw6")
+texture_margin_left = 24.0
+texture_margin_right = 24.0
 modulate_color = Color(0.811765, 0.811765, 0.811765, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ta1v6"]
+texture = ExtResource("1_a7sw6")
+modulate_color = Color(0.811765, 0.811765, 0.811765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tuxek"]
+bg_color = Color(1, 0.823529, 0.560784, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_02x0u"]
 texture = ExtResource("2_mph3o")
 texture_margin_left = 10.0
 modulate_color = Color(0.890196, 0.733333, 0.498039, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lci5l"]
+bg_color = Color(1, 1, 1, 1)
+
 [resource]
+Button/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+Button/colors/font_focus_color = Color(0.372549, 0.223529, 0, 1)
+Button/colors/font_hover_color = Color(0.372549, 0.223529, 0, 1)
+Button/colors/font_pressed_color = Color(0.372549, 0.223529, 0, 1)
+Button/styles/hover = SubResource("StyleBoxTexture_uqj48")
+Button/styles/normal = ExtResource("2_epqms")
+Button/styles/pressed = ExtResource("2_epqms")
 IconButton/base_type = &"Button"
 IconButton/styles/hover = SubResource("StyleBoxTexture_ta1v6")
 IconButton/styles/normal = ExtResource("2_c4s8f")
 IconButton/styles/pressed = ExtResource("2_c4s8f")
+KeybindLabel/base_type = &"Label"
+KeybindLabel/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+KeybindPanel/base_type = &"Panel"
+KeybindPanel/styles/panel = SubResource("StyleBoxFlat_tuxek")
 Label/colors/font_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
 Label/fonts/font = ExtResource("1_3j5al")
 PieceButton/base_type = &"Button"
@@ -29,3 +57,8 @@ PieceButton/styles/normal = ExtResource("2_evrn2")
 PieceButton/styles/pressed = ExtResource("2_evrn2")
 PieceButtonLabel/base_type = &"Label"
 PieceButtonLabel/colors/font_color = Color(0.372549, 0.223529, 0, 1)
+ScrimPanel/base_type = &"Panel"
+ScrimPanel/styles/panel = SubResource("StyleBoxFlat_lci5l")
+TurnChangeLabel/base_type = &"Label"
+TurnChangeLabel/colors/font_color = Color(1, 0.823529, 0.560784, 1)
+TurnChangeLabel/font_sizes/font_size = 45

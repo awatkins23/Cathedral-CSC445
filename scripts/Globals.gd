@@ -22,3 +22,9 @@ enum Team {
 	LIGHT,
 	CATHEDRAL
 }
+
+enum GameWinState {
+	DARK,
+	LIGHT,
+	DRAW
+}

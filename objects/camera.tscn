@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://ct7lw1i0dcfkk"]
+
+[ext_resource type="Script" path="res://scripts/Camera.gd" id="1_shefd"]
+[ext_resource type="Shader" path="res://shaders/outline-v4.gdshader" id="2_1habr"]
+[ext_resource type="AudioStream" uid="uid://bph7tilnt1cae" path="res://imports/sounds/boardturn.mp3" id="3_iygxx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ufyvh"]
+render_priority = 0
+shader = ExtResource("2_1habr")
+shader_parameter/outlineColor = Color(0, 0, 0, 0.588235)
+shader_parameter/depth_threshold = 0.025
+shader_parameter/normal_threshold = 0.5
+shader_parameter/normal_smoothing = 0.25
+shader_parameter/max_thickness = 1.3
+shader_parameter/min_thickness = 0.5
+shader_parameter/max_distance = 100000.0
+shader_parameter/min_distance = 2.0
+shader_parameter/grazing_fresnel_power = 5.0
+shader_parameter/grazing_angle_mask_power = 1.0
+shader_parameter/grazing_angle_modulation_factor = 50.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_4mgv0"]
+material = SubResource("ShaderMaterial_ufyvh")
+flip_faces = true
+size = Vector2(100, 100)
+
+[node name="Camera" type="Node3D" groups=["board", "camera", "hud"]]
+script = ExtResource("1_shefd")
+
+[node name="Camera" type="Camera3D" parent="."]
+projection = 1
+current = true
+size = 12.0
+
+[node name="OutlineShader" type="MeshInstance3D" parent="Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.18744)
+visible = false
+mesh = SubResource("QuadMesh_4mgv0")
+
+[node name="RotateSoundPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_iygxx")
+pitch_scale = 2.0

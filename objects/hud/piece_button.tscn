@@ -18,38 +18,6 @@ tracks/0/keys = {
 "values": [Vector2(0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_8q68u"]
-resource_name = "piece_button_hover_end"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Button:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(2, 2),
-"update": 0,
-"values": [Vector2(-20, 0), Vector2(0, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_r2yb0"]
-resource_name = "piece_button_hover"
-length = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Button:position")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1),
-"transitions": PackedFloat32Array(0.5, 0.5),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(-20, 0)]
-}
-
 [sub_resource type="Animation" id="Animation_idb75"]
 resource_name = "piece_button_enter"
 length = 0.15
@@ -82,6 +50,38 @@ tracks/0/keys = {
 "values": [Vector2(168, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_8q68u"]
+resource_name = "piece_button_hover_end"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(2, 2),
+"update": 0,
+"values": [Vector2(-20, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_r2yb0"]
+resource_name = "piece_button_hover"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Button:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-20, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_jirk8"]
 _data = {
 "RESET": SubResource("Animation_hfkr4"),
@@ -111,6 +111,7 @@ offset_right = 20.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_default_cursor_shape = 2
 theme_type_variation = &"PieceButton"
 
 [node name="BoxContainer" type="BoxContainer" parent="Button"]
@@ -120,7 +121,7 @@ anchor_left = 0.083
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 5.0
-offset_right = -25.0
+offset_right = -30.0
 offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 2

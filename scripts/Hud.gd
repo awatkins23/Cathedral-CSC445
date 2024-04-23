@@ -13,6 +13,8 @@ var _turn_count: int
 var _current_team: Globals.Team
 var _piece_counts: Array[int]
 
+var _turn_end_visible: bool = false
+
 ######### Preload Piece Tile Textures #########
 var _piece_tile_textures: Array[CompressedTexture2D] = [
 	preload("res://imports/textures/tavern_tiles.png"), 		# Tavern
@@ -49,30 +51,50 @@ var _piece_names = [
 ]
 
 var _team_names = [
-	"Dark",
-	"Light",
-	"Light"
+	"DARK",
+	"LIGHT",
+	"LIGHT"
 ]
 
 var _piece_tile_colors = [
-	Color("5f3900"),
 	Color("ffd28f"),
+	Color("5f3900"),
 	Color("7b7b7b")
+]
+
+# preload themes
+var _themes = [
+	preload("res://themes/dark_theme.tres"),
+	preload("res://themes/light_theme.tres"),
+	null
 ]
 
 var _piece_button = preload("res://objects/hud/piece_button.tscn")
 var _loaded_buttons: Array[Control] = []
 
+var _turn_change_transition = preload("res://objects/hud/turn_change.tscn")
+var _game_end_node = preload("res://objects/hud/game_end.tscn")
+
 # format strings
 var _turn_status_format_string = "%s - Turn %s"
+var _turn_format_string = "Turn %s"
 
 ######### Children #########
 @onready var _piece_buttons_container = $PieceButtons
 @onready var _turn_status_label = $Stats/TurnStatus
+@onready var _select_sound_player = $SelectSoundPlayer
+@onready var _end_turn_animation_player = $EndTurnButtonContainer/EndTurnAnimationPlayer
+@onready var _keybinds_container = $Keybinds
+@onready var _camera_controls = $CameraControls
+@onready var _stats_container = $Stats
 
 ######### Functions #########
+func _refresh_theme() -> void:
+	var new_theme = _themes[_current_team]
+	if new_theme:
+		theme = new_theme
+
 func _begin_click(piece_type: Globals.Piece) -> void:
-	$SelectStream.play()
 	# debounce
 	if _clicking_piece:
 		return
@@ -117,17 +139,17 @@ func _create_piece_button(piece: Globals.Piece, enter_delay: float) -> void:
 	# append to _loaded_buttons array
 	_loaded_buttons.append(button)
 
+func _delete_piece_buttons() -> void:
+	# delete old piece buttons
+	for button in _loaded_buttons:
+		button.queue_free()
+	_loaded_buttons = []
+	
 func _load_piece_buttons() -> void:
 	# ensure that there is a _piece_counts array to iterate
 	if !_piece_counts:
 		return
-	
-	# delete old piece buttons
-	for button in _loaded_buttons:
-		button.queue_free()
-			
-	_loaded_buttons = []
-		
+
 	# load new piece buttons
 	if _current_team == 2:
 		_create_piece_button(Globals.Piece.CATHEDRAL, 0.0)
@@ -140,20 +162,85 @@ func _load_piece_buttons() -> void:
 				button_n += 1
 			piece += 1
 
+func _display_turn_change_transition() -> Control:
+	var scene = _turn_change_transition.instantiate()
+	
+	scene.title = _team_names[_current_team]
+	scene.subtitle = _turn_format_string % [ _turn_count + 1 ]
+	
+	add_child(scene)
+	
+	return scene
+	
+func _display_game_end(state: Globals.GameWinState, dark_points: int, light_points: int) -> void:
+	var scene = _game_end_node.instantiate()
+	
+	scene.state = state
+	scene.dark_points = dark_points
+	scene.light_points = light_points
+	
+	# reset the hud
+	_reset_hud()
+	
+	# hide the HUD
+	_keybinds_container.visible = false
+	_stats_container.visible = false
+	_camera_controls.visible = false
+	
+	# add child to scene
+	add_child(scene)
+
+func _reset_hud() -> void:
+	# delete old buttons
+	_delete_piece_buttons()
+	
+	# hide turn end button if possible
+	if _turn_end_visible:
+		_turn_end_visible = false
+		_end_turn_animation_player.play("end_turn_out")
+
+func _update_hud() -> void:
+	# set the theme to the one of the current team
+	_refresh_theme()
+	
+	# show turn change transition
+	var changer = _display_turn_change_transition()
+	
+	_turn_status_label.text = _turn_status_format_string % [_team_names[_current_team], _turn_count + 1]
+	
+	# reset the hud
+	_reset_hud()
+	
+	await changer.tree_exited
+	_load_piece_buttons()
+
 ######### Board Group Signals #########
-func board_on_turn_begin(turn_count: int, team: Globals.Team, piece_counts: Array[int]):
+func board_on_turn_begin(turn_count: int, team: Globals.Team, piece_counts: Array[int], is_cpu: bool):
+	if is_cpu:
+		return
+		
 	_turn_count = turn_count
 	_current_team = team
 	_piece_counts = piece_counts
 	if _is_ready:
-		_load_piece_buttons()
-		_turn_status_label.text = _turn_status_format_string % [_team_names[team], _turn_count + 1]
+		_update_hud()
+
+func board_on_game_end(win_state: Globals.GameWinState, dark_points: int, light_points: int) -> void:
+	_display_game_end(win_state, dark_points, light_points)
+	
+func board_on_territory_phase_start() -> void:
+	# delete old buttons
+	_delete_piece_buttons()
+		
+	_turn_end_visible = true
+	_end_turn_animation_player.play("end_turn_in")
 
 ######### HUD Group Signals #########
 func hud_on_piece_button_down(piece_type: Globals.Piece):
 	_begin_click(piece_type)
 	
 func hud_on_piece_button_up(piece_type: Globals.Piece):
+	_select_sound_player.play()
 	_end_click()
 
 ######### Signals #########
@@ -173,21 +260,28 @@ func _input(event):
 func _ready():
 	_is_ready = true
 	
-	_load_piece_buttons()
-	# set turn status label text
-	_turn_status_label.text = _turn_status_format_string % [_team_names[_current_team], _turn_count + 1]
+	_end_turn_animation_player.play("DEFAULT")
+	_update_hud()
 
 # When the camera rotate left button is clicked.
 func _on_left_pressed():
-	$SelectStream.play()
+	_select_sound_player.play()
 	get_tree().call_group("hud", "on_left_pressed")
 
 # When the camera rotate right button is clicked.
 func _on_right_pressed():
-	$SelectStream.play()
+	_select_sound_player.play()
 	get_tree().call_group("hud", "on_right_pressed")
 
 # When the camera toggle button is clicked.
 func _on_toggle_pressed():
-	$SelectStream.play()
+	_select_sound_player.play()
 	get_tree().call_group("hud", "on_toggle_camera_mode")
+
+func _on_menu_pressed():
+	_select_sound_player.play()
+	SceneSwitcher.transition_to_main_menu()
+
+func _on_end_turn_button_pressed():
+	_select_sound_player.play()
+	get_tree().call_group("hud", "hud_on_turn_end_pressed")

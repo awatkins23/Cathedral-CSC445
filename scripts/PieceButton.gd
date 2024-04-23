@@ -10,6 +10,7 @@ extends Control
 @export var enter_animation_delay: float = 0.0
 
 # children
+@onready var _button = $Button
 @onready var _piece_name_label = $Button/BoxContainer/PieceName
 @onready var _piece_texture_rect = $Button/BoxContainer/PieceTexture
 @onready var _animator = $AnimationPlayer
@@ -19,10 +20,12 @@ var _entered: bool = false
 
 func _enter():
 	_animator.play("piece_button_enter")
+	_button.visible = true
 	_entered = true
 	_enter_timer.queue_free()
 
 func _ready():
+	_button.visible = false
 	_piece_name_label.text = piece_name
 	_piece_texture_rect.texture = texture
 	_piece_texture_rect.modulate = texture_color

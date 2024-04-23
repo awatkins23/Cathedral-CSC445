@@ -13,9 +13,11 @@ extends Node3D
 ######### Variables #########
 var camera_rotation: Vector3
 var mouse_velocity: Vector2
+var _game_ended: bool = false
 
 ######### Children #########
 @onready var camera = $Camera
+@onready var _rotate_sound_player = $RotateSoundPlayer
 
 ######### Functions #########
 func set_mode(new_mode: bool) -> void:
@@ -33,36 +35,43 @@ func toggle_mode() -> void:
 	set_mode(!isometric)
 
 func rotate_left() -> void:
+	_rotate_sound_player.play()
 	camera_rotation.y = camera_rotation.y - 90.0
 	rotation_updated()
 	
 func rotate_right() -> void:
+	_rotate_sound_player.play()
 	camera_rotation.y = camera_rotation.y + 90.0
 	rotation_updated()
 
 ######### HUD Group Signals #########
 func on_toggle_camera_mode():
-	toggle_mode()
+	if !_game_ended:
+		toggle_mode()
 
 func on_left_pressed():
-	rotate_left()
+	if !_game_ended:
+		rotate_left()
 	
 func on_right_pressed():
-	rotate_right()
+	if !_game_ended:
+		rotate_right()
 
+######### Signals #########
+func board_on_game_end(win_state: Globals.GameWinState, dark_points: int, light_points: int) -> void:
+	_game_ended = true
+	if (!isometric):
+		set_mode(true)
+	
 ######### Signals #########
 func _ready():
 	set_mode(true)
 	position = target.position
 	rotation_degrees = camera_rotation
 	camera.position = Vector3(0.0, 0.0, 10.0)
-	pass
+	
 	
 func _input(event):
-	#if event is InputEventMouse:
-		#mouse_enabled = event.button_mask == MOUSE_BUTTON_MASK_RIGHT
-	#if mouse_enabled and (event is InputEventMouseMotion):
-		#mouse_velocity = (event as InputEventMouseMotion).relative * mouse_strength
 	if event is InputEventMouseMotion:
 		var viewport = get_viewport()
 		var mouse_pos = viewport.get_mouse_position()
@@ -73,18 +82,22 @@ func _input(event):
 
 func _physics_process(delta):
 	# check inputs
-	if Input.is_action_just_pressed("camera_toggle"):
-		toggle_mode()
-	if Input.is_action_just_pressed("camera_right"):
-		rotate_right()
-	if Input.is_action_just_pressed("camera_left"):
-		rotate_left()
-	if Input.is_action_just_pressed("camera_top_down"):
-		set_mode(false)
-	if Input.is_action_just_pressed("camera_isometric"):
-		set_mode(true)
+	if !_game_ended:
+		if Input.is_action_just_pressed("camera_toggle"):
+			toggle_mode()
+		if Input.is_action_just_pressed("camera_right"):
+			rotate_right()
+		if Input.is_action_just_pressed("camera_left"):
+			rotate_left()
+		if Input.is_action_just_pressed("camera_top_down"):
+			set_mode(false)
+		if Input.is_action_just_pressed("camera_isometric"):
+			set_mode(true)
 	
 	# Set position and rotation to targets
+	
+	if _game_ended:
+		camera_rotation.y += (20.0 * delta)
 	
 	position = position.lerp(target.position, delta * 12)
 	rotation_degrees = rotation_degrees.lerp(camera_rotation, delta * 12)

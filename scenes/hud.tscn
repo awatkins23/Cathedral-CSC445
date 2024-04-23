@@ -1,11 +1,104 @@
-[gd_scene load_steps=8 format=3 uid="uid://bhpktixhb2lg4"]
+[gd_scene load_steps=14 format=3 uid="uid://bhpktixhb2lg4"]
 
-[ext_resource type="Theme" uid="uid://dd4ircea1chno" path="res://themes/dark_theme.tres" id="1_ea30f"]
+[ext_resource type="Theme" uid="uid://dmnjjokglxxpx" path="res://themes/light_theme.tres" id="1_6dgm4"]
 [ext_resource type="Script" path="res://scripts/Hud.gd" id="2_imea3"]
+[ext_resource type="PackedScene" uid="uid://dqjfo6jfrkr3t" path="res://objects/hud/keybind.tscn" id="3_8ms6a"]
 [ext_resource type="Texture2D" uid="uid://dxmumc6qpppcy" path="res://imports/icons/rotate_left.png" id="3_iase3"]
 [ext_resource type="Texture2D" uid="uid://ccl6xda73sosn" path="res://imports/icons/camera.png" id="4_rltly"]
 [ext_resource type="Texture2D" uid="uid://c1bpumiv6pwd4" path="res://imports/icons/rotate_right.png" id="5_0gumd"]
-[ext_resource type="AudioStream" uid="uid://ctrgxqhdo51hh" path="res://imports/sounds/select.mp3" id="6_ioyk7"]
+[ext_resource type="Texture2D" uid="uid://c1blvfgvdp1gu" path="res://imports/icons/menu.png" id="7_84rsl"]
+[ext_resource type="AudioStream" uid="uid://ctrgxqhdo51hh" path="res://imports/sounds/select.mp3" id="8_cwd2m"]
+
+[sub_resource type="Animation" id="Animation_78gex"]
+resource_name = "DEFAULT"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EndTurnButtonContainer/EndTurnButton:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 126),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(126, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EndTurnButtonContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_l103q"]
+resource_name = "end_turn_in"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EndTurnButtonContainer/EndTurnButton:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector2(126, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EndTurnButtonContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_82s4h"]
+resource_name = "end_turn_out"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EndTurnButtonContainer/EndTurnButton:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(2, 2),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(126, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EndTurnButtonContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_roimw"]
+_data = {
+"DEFAULT": SubResource("Animation_78gex"),
+"end_turn_in": SubResource("Animation_l103q"),
+"end_turn_out": SubResource("Animation_82s4h")
+}
 
 [sub_resource type="LabelSettings" id="LabelSettings_5nfoj"]
 font_size = 18
@@ -18,10 +111,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_ea30f")
+theme = ExtResource("1_6dgm4")
 script = ExtResource("2_imea3")
 
-[node name="Keybinds" type="Label" parent="."]
+[node name="Keybinds" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -34,9 +127,38 @@ offset_right = -8.0
 offset_bottom = -5.0
 grow_horizontal = 0
 grow_vertical = 0
-text = "[R] Rotate Piece | [X] Cancel Placement | [C] Toggle Camera | [Q/E] Rotate Camera"
-label_settings = SubResource("LabelSettings_5nfoj")
-horizontal_alignment = 2
+
+[node name="Keybind" parent="Keybinds" instance=ExtResource("3_8ms6a")]
+layout_mode = 2
+hotkey = "R"
+hint = "Rotate Piece"
+
+[node name="Padding" type="Control" parent="Keybinds"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="Keybind2" parent="Keybinds" instance=ExtResource("3_8ms6a")]
+layout_mode = 2
+hotkey = "X"
+hint = "Cancel Placement"
+
+[node name="Padding2" type="Control" parent="Keybinds"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="Keybind3" parent="Keybinds" instance=ExtResource("3_8ms6a")]
+layout_mode = 2
+hotkey = "C"
+hint = "Toggle Camera"
+
+[node name="Padding3" type="Control" parent="Keybinds"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="Keybind4" parent="Keybinds" instance=ExtResource("3_8ms6a")]
+layout_mode = 2
+hotkey = "Q/E"
+hint = "Rotate Camera"
 
 [node name="CameraControls" type="BoxContainer" parent="."]
 layout_mode = 1
@@ -54,6 +176,7 @@ grow_vertical = 0
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 size_flags_vertical = 8
+mouse_default_cursor_shape = 2
 theme_type_variation = &"IconButton"
 
 [node name="Icon" type="TextureRect" parent="CameraControls/Left"]
@@ -73,6 +196,7 @@ texture = ExtResource("3_iase3")
 [node name="Toggle" type="Button" parent="CameraControls"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_type_variation = &"IconButton"
 
 [node name="Icon" type="TextureRect" parent="CameraControls/Toggle"]
@@ -93,6 +217,7 @@ texture = ExtResource("4_rltly")
 custom_minimum_size = Vector2(36, 36)
 layout_mode = 2
 size_flags_vertical = 8
+mouse_default_cursor_shape = 2
 theme_type_variation = &"IconButton"
 
 [node name="Icon" type="TextureRect" parent="CameraControls/Right"]
@@ -121,6 +246,35 @@ grow_vertical = 2
 alignment = 1
 vertical = true
 
+[node name="EndTurnButtonContainer" type="Control" parent="."]
+custom_minimum_size = Vector2(118, 48)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -126.0
+offset_top = -24.0
+offset_right = -8.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="EndTurnButton" type="Button" parent="EndTurnButtonContainer"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 48.0
+mouse_default_cursor_shape = 2
+text = "End Turn"
+
+[node name="EndTurnAnimationPlayer" type="AnimationPlayer" parent="EndTurnButtonContainer"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_roimw")
+}
+
 [node name="Stats" type="FlowContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -131,15 +285,41 @@ offset_right = 10.0
 offset_bottom = 30.0
 grow_horizontal = 2
 
+[node name="Menu" type="Button" parent="Stats"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_type_variation = &"IconButton"
+
+[node name="Icon" type="TextureRect" parent="Stats/Menu"]
+modulate = Color(0.372549, 0.223529, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_84rsl")
+
+[node name="Padding" type="Control" parent="Stats"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
 [node name="TurnStatus" type="Label" parent="Stats"]
 layout_mode = 2
 text = "Light - Turn 0"
 label_settings = SubResource("LabelSettings_5nfoj")
 
-[node name="SelectStream" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("6_ioyk7")
+[node name="SelectSoundPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_cwd2m")
 volume_db = 5.6
 
 [connection signal="pressed" from="CameraControls/Left" to="." method="_on_left_pressed"]
 [connection signal="pressed" from="CameraControls/Toggle" to="." method="_on_toggle_pressed"]
 [connection signal="pressed" from="CameraControls/Right" to="." method="_on_right_pressed"]
+[connection signal="pressed" from="EndTurnButtonContainer/EndTurnButton" to="." method="_on_end_turn_button_pressed"]
+[connection signal="pressed" from="Stats/Menu" to="." method="_on_menu_pressed"]

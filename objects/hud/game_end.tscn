@@ -180,7 +180,7 @@ libraries = {
 }
 
 [node name="Scrim" type="Panel" parent="."]
-modulate = Color(0, 0, 0, 0.690196)
+modulate = Color(0, 0, 0, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -203,17 +203,19 @@ custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
 [node name="Title" type="Label" parent="Container/TitleContainer"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -64.0
+offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "LIGHT VICTORY"
 horizontal_alignment = 1
 
 [node name="Divider" type="Control" parent="Container"]
-custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 
@@ -230,11 +232,12 @@ custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
 
 [node name="LightPointsContainer" type="Control" parent="Container"]
-custom_minimum_size = Vector2(0, 35)
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
 [node name="LightPoints" type="Label" parent="Container/LightPointsContainer"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,11 +250,12 @@ label_settings = SubResource("LabelSettings_836fs")
 horizontal_alignment = 1
 
 [node name="DarkPointsContainer" type="Control" parent="Container"]
-custom_minimum_size = Vector2(0, 35)
+visible = false
 layout_mode = 2
 mouse_filter = 1
 
 [node name="DarkPoints" type="Label" parent="Container/DarkPointsContainer"]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -274,10 +278,16 @@ layout_mode = 2
 [node name="MainMenuButton" type="Button" parent="Container/MainMenuButtonContainer"]
 modulate = Color(1, 1, 1, 0)
 custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-offset_left = 528.0
-offset_right = 624.0
-offset_bottom = 48.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -24.0
+offset_right = 48.0
+offset_bottom = 24.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4

@@ -43,3 +43,7 @@ mesh = SubResource("QuadMesh_yyyfi")
 [node name="TileSounds" type="AudioStreamPlayer" parent="."]
 volume_db = -7.2
 pitch_scale = 1.52
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51, 0)
+size = Vector3(10, 1, 10)

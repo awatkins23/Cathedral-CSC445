@@ -13,7 +13,7 @@ config_version=5
 config/name="Cathedral"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://images/icon.svg"
+config/icon="res://images/cathedral_icon.png"
 
 [autoload]
 

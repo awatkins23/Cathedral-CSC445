@@ -266,13 +266,7 @@ func _cancel_piece_placement() -> void:
 	_placing_piece = null
 	
 
-func cpu_turn() -> void:
-	#claim territory
-	for i in range(0,_territories[Globals.Team.DARK].size()):
-		if !_territories[Globals.Team.DARK][i][1]:
-			_claim_territory(i)
-			break
-	
+func cpu_turn() -> void:	
 	#place piece
 	var visited_territories = []
 	var visited_tiles = []
@@ -320,7 +314,7 @@ func cpu_turn() -> void:
 					if _place_piece(piece, Globals.Team.DARK, tile, 90 * rot):
 						get_tree().call_group("board", "on_piece_placement_end", piece, true)
 						return
-	
+            
 	_dark_finished = true
 	_end_turn()
 
@@ -673,6 +667,12 @@ func on_piece_placement_end(piece: Globals.Piece, success: bool) -> void:
 		_update_neutral_territories()
 
 		if (_current_team == Globals.Team.CATHEDRAL) or (_current_team == Globals.Team.DARK and _turn_count < 3) or (_current_team == Globals.Team.LIGHT and _turn_count < 4) or (_current_team == Globals.Team.DARK and _cpu_game):
+			if (_current_team == Globals.Team.DARK and _cpu_game):
+				#claim territory
+				for k in range(0,_territories[Globals.Team.DARK].size()):
+					if !_territories[Globals.Team.DARK][k][1]:
+						_claim_territory(k)
+						break
 			return _end_turn()
 		
 		get_tree().call_group("board", "board_on_territory_phase_start")

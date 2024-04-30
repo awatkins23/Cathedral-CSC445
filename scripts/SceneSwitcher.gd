@@ -70,7 +70,8 @@ func _change_scene_background(new_scene_path: String) -> void:
 	
 	# delete the current scene
 	var current_scene: Node = get_tree().current_scene
-	current_scene.queue_free()
+	if (current_scene != null):
+		current_scene.queue_free()
 	get_tree().current_scene = null
 
 	var err: int = ResourceLoader.load_threaded_request(_load_target_path, "PackedScene")
